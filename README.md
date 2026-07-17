@@ -1,328 +1,403 @@
-# 🛡️ Enterprise SSH Threat Monitoring using Splunk
+# 🛡️ Enterprise SSH Threat Monitoring & Detection Engineering with Splunk
 
-<p align="center">
-  <strong>Enterprise SOC Detection Engineering Lab</strong>
-</p>
+<div align="center">
 
-<p align="center">
-  AWS • Splunk Enterprise • Ubuntu • Kali Linux • Detection Engineering • SPL
-</p>
+### 🔐 From Raw SSH Telemetry to Actionable SOC Detection
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0-blue" alt="Version">
-  <img src="https://img.shields.io/badge/AWS-EC2-orange" alt="AWS">
-  <img src="https://img.shields.io/badge/Splunk-Enterprise-green" alt="Splunk">
-  <img src="https://img.shields.io/badge/Ubuntu-Linux-E95420" alt="Ubuntu">
-  <img src="https://img.shields.io/badge/SIEM-Detection%20Engineering-blueviolet" alt="SIEM">
-  <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
-</p>
+**A cloud-hosted detection engineering lab that simulates SSH authentication threats, centralizes Linux security telemetry, detects suspicious behavior, and operationalizes alerts for SOC investigation.**
 
----
+<br>
 
-## 📌 Overview
+![AWS](https://img.shields.io/badge/AWS-EC2-FF9900?style=for-the-badge\&logo=amazonwebservices\&logoColor=white)
+![Splunk](https://img.shields.io/badge/Splunk-Enterprise-000000?style=for-the-badge\&logo=splunk\&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-Linux-E95420?style=for-the-badge\&logo=ubuntu\&logoColor=white)
+![Kali Linux](https://img.shields.io/badge/Kali-Linux-557C94?style=for-the-badge\&logo=kalilinux\&logoColor=white)
+![SIEM](https://img.shields.io/badge/SIEM-Detection_Engineering-7B2CBF?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-2EA44F?style=for-the-badge)
 
-**Enterprise SSH Threat Monitoring using Splunk** is an end-to-end Security Operations Center (SOC) lab designed to simulate, detect, investigate, and monitor suspicious SSH authentication activity against Linux servers.
+<br>
 
-The project demonstrates the complete security monitoring lifecycle:
+**AWS EC2** · **Splunk Enterprise** · **Splunk Universal Forwarder** · **Ubuntu** · **Kali Linux** · **SPL** · **SOC Operations**
 
-**Attack Simulation → Log Generation → Log Collection → Centralized SIEM → Detection Engineering → Dashboard Visualization → Automated Alerting → SOC Investigation**
-
-The environment was built using AWS EC2, Ubuntu Linux, Kali Linux, Splunk Enterprise, and the Splunk Universal Forwarder.
-
-Linux SSH authentication events generated on the monitored Ubuntu server are recorded in `/var/log/auth.log`. The Splunk Universal Forwarder continuously monitors this log file and forwards events to the Splunk Enterprise server.
-
-Custom Splunk Search Processing Language (SPL) queries are then used to identify suspicious authentication patterns, including repeated login failures, brute-force behavior, targeted user accounts, and successful authentication activity.
-
-The resulting security telemetry is presented through a centralized SOC dashboard and scheduled alerts.
-
-> **Security Notice:** All attack simulations and security testing documented in this repository were performed exclusively within an authorized and controlled lab environment.
+</div>
 
 ---
 
-## 📑 Table of Contents
+## 📖 Project Overview
 
-- [Project Objectives](#-project-objectives)
-- [Architecture](#️-architecture)
-- [Architecture Components](#-architecture-components)
-- [Data Flow](#-data-flow)
-- [Technology Stack](#️-technology-stack)
-- [Project Workflow](#-project-workflow)
-- [AWS Infrastructure](#️-aws-infrastructure)
-- [Log Collection Pipeline](#-log-collection-pipeline)
-- [Attack Simulation](#-attack-simulation)
-- [Detection Engineering](#-detection-engineering)
-- [Detection Catalog](#-detection-catalog)
-- [SOC Dashboard](#-soc-dashboard)
-- [Automated Alerting](#-automated-alerting)
-- [SOC Investigation Workflow](#-soc-investigation-workflow)
-- [Project Screenshots](#-project-screenshots)
-- [Repository Structure](#️-repository-structure)
-- [Documentation](#-documentation)
-- [Skills Demonstrated](#-skills-demonstrated)
-- [Lessons Learned](#-lessons-learned)
-- [Version 1.0](#-version-10)
-- [Future Roadmap](#-future-roadmap)
-- [License](#-license)
-- [Author](#-author)
+Modern Security Operations Centers depend on reliable telemetry and well-engineered detections to identify suspicious behavior before it becomes a security incident.
 
----
+**Enterprise SSH Threat Monitoring & Detection Engineering with Splunk** is an end-to-end SOC lab that demonstrates how Linux SSH authentication activity can be collected, centralized, analyzed, detected, visualized, and investigated using Splunk Enterprise.
 
-# 🎯 Project Objectives
-
-The primary objective of this project is to demonstrate how a Security Operations Center can detect and investigate credential-based attacks targeting Linux SSH services.
-
-The project was designed to:
-
-- Deploy a centralized SIEM using Splunk Enterprise.
-- Monitor Linux SSH authentication activity.
-- Collect authentication logs using the Splunk Universal Forwarder.
-- Centralize security telemetry in a dedicated Splunk index.
-- Simulate controlled SSH authentication attacks.
-- Develop custom SPL detection rules.
-- Identify repeated authentication failures.
-- Identify the most active source IP addresses.
-- Identify frequently targeted user accounts.
-- Monitor successful SSH authentications.
-- Detect potential successful authentication following repeated failures.
-- Build an operational SOC monitoring dashboard.
-- Configure scheduled Splunk alerts.
-- Document the complete attack-to-detection lifecycle.
-
----
-
-# 🏗️ Architecture
-
-The project implements an end-to-end SSH threat monitoring pipeline.
-
-<p align="center">
-  <img src="diagrams/architecture.png" alt="Enterprise SSH Threat Monitoring Architecture" width="100%">
-</p>
-
-The architecture separates the environment into four primary components:
+The project recreates a practical security monitoring pipeline in AWS:
 
 ```text
-Kali Linux
-    │
-    │ Controlled SSH Authentication Testing
-    │ TCP/22
-    ▼
-Ubuntu Target Server
-    │
-    │ /var/log/auth.log
-    ▼
-Splunk Universal Forwarder
-    │
-    │ Log Forwarding
-    │ TCP/9997
-    ▼
-Splunk Enterprise
-    │
-    ├── linux_auth Index
-    ├── SPL Searches
-    ├── Detection Rules
-    ├── Dashboards
-    └── Scheduled Alerts
-    │
-    ▼
-SOC Analyst
-    │
-    ├── Monitoring
-    ├── Investigation
-    └── Incident Response
+ATTACK SIMULATION
+      │
+      ▼
+SECURITY TELEMETRY
+      │
+      ▼
+LOG COLLECTION
+      │
+      ▼
+SIEM INGESTION
+      │
+      ▼
+DETECTION ENGINEERING
+      │
+      ├──────────────┐
+      ▼              ▼
+  DASHBOARDS       ALERTS
+      │              │
+      └──────┬───────┘
+             ▼
+      SOC INVESTIGATION
+```
+
+Controlled authentication activity is generated against an Ubuntu SSH server. Authentication events written to `/var/log/auth.log` are collected by the Splunk Universal Forwarder and transmitted to Splunk Enterprise.
+
+Custom SPL detections transform this raw telemetry into security use cases capable of identifying:
+
+* Repeated SSH authentication failures
+* Potential brute-force behavior
+* High-volume suspicious source IPs
+* Frequently targeted user accounts
+* Successful SSH authentications
+* Potential successful authentication following repeated failures
+
+The project moves beyond simply installing a SIEM by demonstrating the complete **attack-to-detection lifecycle** used in security operations.
+
+> [!IMPORTANT]
+> All security testing and attack simulations documented in this repository were performed exclusively against systems owned and controlled within an authorized lab environment.
+
+---
+
+## 🎯 What This Project Demonstrates
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🔍 Detection Engineering
+
+* Custom SPL detection development
+* SSH brute-force detection
+* Authentication behavior analysis
+* Threshold-based detection
+* Security event correlation
+* Detection validation
+
+</td>
+<td width="50%" valign="top">
+
+### 🛡️ SOC Operations
+
+* Centralized security monitoring
+* Alert investigation
+* Authentication analysis
+* Incident triage
+* Threat hunting
+* Analyst investigation workflows
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" valign="top">
+
+### ☁️ Cloud Security
+
+* AWS EC2 infrastructure
+* VPC networking
+* Security group configuration
+* Cloud-hosted SIEM architecture
+* Secure service communication
+
+</td>
+<td width="50%" valign="top">
+
+### 📊 SIEM Engineering
+
+* Splunk Enterprise
+* Universal Forwarder
+* Log ingestion pipelines
+* Index management
+* SPL analytics
+* Dashboards and alerts
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Architecture
+
+<div align="center">
+
+<img src="diagrams/architecture.png" alt="Enterprise SSH Threat Monitoring Architecture" width="95%">
+
+</div>
+
+### Architecture at a Glance
+
+```text
+┌─────────────────────────┐
+│      KALI LINUX         │
+│   Security Testing      │
+│                         │
+│  • SSH Client           │
+│  • Nmap                 │
+│  • Controlled Testing   │
+└────────────┬────────────┘
+             │
+             │ SSH Authentication Activity
+             │ TCP/22
+             ▼
+┌─────────────────────────┐
+│     UBUNTU SERVER       │
+│   Monitored Endpoint    │
+│                         │
+│  • OpenSSH              │
+│  • /var/log/auth.log    │
+│  • Universal Forwarder  │
+└────────────┬────────────┘
+             │
+             │ Security Telemetry
+             │ TCP/9997
+             ▼
+┌─────────────────────────┐
+│   SPLUNK ENTERPRISE     │
+│   Centralized SIEM      │
+│                         │
+│  • linux_auth Index     │
+│  • SPL Detections       │
+│  • Dashboards           │
+│  • Scheduled Alerts     │
+└────────────┬────────────┘
+             │
+             │ Actionable Security Data
+             ▼
+┌─────────────────────────┐
+│       SOC ANALYST       │
+│                         │
+│  • Monitor              │
+│  • Investigate          │
+│  • Triage               │
+│  • Respond              │
+└─────────────────────────┘
 ```
 
 ---
 
-# 🧩 Architecture Components
+## 🔄 End-to-End Detection Pipeline
 
-## 1. Kali Linux
+The lab follows the same fundamental telemetry lifecycle found in production security monitoring environments.
 
-Kali Linux represents the security testing system within the controlled lab.
-
-It is used to generate authentication telemetry for validating the monitoring environment.
-
-Tools used during testing include:
-
-- Nmap
-- Hydra
-- SSH client
-
-The generated authentication activity allows the Splunk detections and alerts to be tested against realistic security events.
+```text
+┌──────────────────────────┐
+│  1. ATTACK SIMULATION    │
+│  Controlled SSH Testing  │
+└─────────────┬────────────┘
+              ▼
+┌──────────────────────────┐
+│  2. EVENT GENERATION     │
+│  OpenSSH Authentication  │
+└─────────────┬────────────┘
+              ▼
+┌──────────────────────────┐
+│  3. LOG COLLECTION       │
+│  /var/log/auth.log       │
+└─────────────┬────────────┘
+              ▼
+┌──────────────────────────┐
+│  4. LOG FORWARDING       │
+│  Universal Forwarder     │
+│  TCP/9997                │
+└─────────────┬────────────┘
+              ▼
+┌──────────────────────────┐
+│  5. SIEM INGESTION       │
+│  Splunk → linux_auth     │
+└─────────────┬────────────┘
+              ▼
+┌──────────────────────────┐
+│  6. DETECTION            │
+│  Custom SPL Analytics    │
+└─────────────┬────────────┘
+              ▼
+       ┌──────┴──────┐
+       ▼             ▼
+┌────────────┐ ┌────────────┐
+│ DASHBOARD  │ │   ALERT    │
+└──────┬─────┘ └──────┬─────┘
+       └───────┬───────┘
+               ▼
+┌──────────────────────────┐
+│  7. SOC INVESTIGATION    │
+│  Analyze → Triage        │
+│  Investigate → Respond   │
+└──────────────────────────┘
+```
 
 ---
 
-## 2. Ubuntu Target Server
+## 🧩 Lab Components
 
-The Ubuntu EC2 instance acts as the monitored Linux endpoint.
+### 🔴 Kali Linux — Security Testing System
 
-The server hosts the OpenSSH service and generates authentication events.
+Kali Linux represents the offensive security component of the controlled environment.
 
-The primary log source monitored in this project is:
+It is used to generate authentication telemetry required to validate the detection pipeline.
+
+**Primary functions:**
+
+* SSH service reconnaissance
+* Controlled authentication testing
+* Failed login generation
+* Detection validation
+
+**Tools:**
+
+`Nmap` · `SSH Client` · `Hydra`
+
+---
+
+### 🟠 Ubuntu — Monitored Endpoint
+
+The Ubuntu EC2 instance represents a Linux server monitored by the SOC.
+
+It runs the OpenSSH service and generates authentication events that become the primary telemetry source for the project.
 
 ```text
 /var/log/auth.log
 ```
 
-This log contains events related to:
+Events include:
 
-- Failed authentication attempts
-- Successful authentications
-- Invalid usernames
-- SSH daemon activity
-- Authentication failures
-- Session creation
-- Session termination
+* Failed authentication attempts
+* Successful SSH authentications
+* Invalid username attempts
+* SSH daemon events
+* Session creation
+* Session termination
 
 ---
 
-## 3. Splunk Universal Forwarder
+### 🟢 Splunk Universal Forwarder — Telemetry Collection
 
-The Splunk Universal Forwarder is installed on the Ubuntu target server.
-
-Its responsibility is to continuously monitor the authentication log and forward newly generated events to the Splunk Enterprise server.
-
-The forwarding path is:
+The Universal Forwarder provides continuous log collection from the monitored endpoint.
 
 ```text
 /var/log/auth.log
         │
         ▼
-Splunk Universal Forwarder
-        │
-        │ TCP/9997
-        ▼
-Splunk Enterprise
+┌───────────────────────┐
+│ Universal Forwarder   │
+└───────────┬───────────┘
+            │
+            │ TCP/9997
+            ▼
+┌───────────────────────┐
+│  Splunk Enterprise    │
+└───────────────────────┘
 ```
+
+This creates a continuous pipeline between endpoint authentication activity and centralized security analytics.
 
 ---
 
-## 4. Splunk Enterprise
+### ⚫ Splunk Enterprise — SIEM & Detection Platform
 
-Splunk Enterprise serves as the centralized Security Information and Event Management platform.
+Splunk Enterprise serves as the central security analytics platform.
 
-Its responsibilities include:
-
-- Receiving authentication logs.
-- Indexing security events.
-- Executing SPL searches.
-- Running detection logic.
-- Supporting threat hunting.
-- Visualizing security events.
-- Generating scheduled alerts.
-- Supporting SOC investigations.
-
-Authentication events are stored within the dedicated:
+Authentication telemetry is stored in the dedicated index:
 
 ```text
 linux_auth
 ```
 
-index.
+Splunk provides:
+
+* Centralized log ingestion
+* Security event indexing
+* SPL-based detection logic
+* Threat hunting capabilities
+* SOC dashboards
+* Scheduled alerting
+* Investigation support
 
 ---
 
-## 5. SOC Analyst
+### 🔵 SOC Analyst — Investigation Layer
 
-The SOC analyst represents the defensive security workflow.
+The analyst represents the human decision-making layer of the detection pipeline.
 
-The analyst uses Splunk to:
-
-- Monitor authentication activity.
-- Review triggered alerts.
-- Investigate suspicious source IPs.
-- Identify targeted accounts.
-- Analyze authentication timelines.
-- Determine whether suspicious activity requires escalation.
-
----
-
-# 🔄 Data Flow
-
-The complete monitoring lifecycle follows this sequence:
+The workflow includes:
 
 ```text
-Controlled Security Test
-        │
-        ▼
-SSH Authentication Activity
-        │
-        ▼
-Ubuntu OpenSSH Service
-        │
-        ▼
-/var/log/auth.log
-        │
-        ▼
-Splunk Universal Forwarder
-        │
-        ▼
-TCP Port 9997
-        │
-        ▼
-Splunk Enterprise
-        │
-        ▼
-linux_auth Index
-        │
-        ▼
-SPL Detection Rules
-        │
-        ├───────────────┐
-        ▼               ▼
-    Dashboard         Alert
-        │               │
-        └───────┬───────┘
-                ▼
-        SOC Investigation
+Monitor
+   ↓
+Detect
+   ↓
+Validate
+   ↓
+Investigate
+   ↓
+Triage
+   ↓
+Respond
 ```
 
 ---
 
-# 🛠️ Technology Stack
+## 🛠️ Technology Stack
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| Cloud Infrastructure | AWS EC2 | Host cloud-based lab infrastructure |
-| SIEM | Splunk Enterprise | Centralized log analysis and detection |
-| Target System | Ubuntu Linux | Monitored Linux endpoint |
-| Testing System | Kali Linux | Controlled security testing |
-| Log Collection | Splunk Universal Forwarder | Forward authentication logs |
-| Log Source | `/var/log/auth.log` | Linux authentication telemetry |
-| Attack Simulation | Hydra | Generate controlled authentication activity |
-| Reconnaissance | Nmap | Validate exposed SSH service |
-| Protocol | SSH | Remote authentication |
-| Detection Language | SPL | Security detection and analysis |
-| Visualization | Splunk Dashboards | SOC monitoring |
-| Alerting | Splunk Alerts | Automated detection notification |
-
----
-
-# 🚀 Project Workflow
-
-The project was implemented using the following workflow.
-
-### Phase 1 — Infrastructure Deployment
-
-AWS EC2 instances were deployed to host:
-
-- Splunk Enterprise
-- Ubuntu monitored endpoint
-
-Network communication was configured using AWS security groups.
+| Category              | Technology                 | Role                              |
+| :-------------------- | :------------------------- | :-------------------------------- |
+| ☁️ **Cloud**          | AWS EC2                    | Hosts the lab infrastructure      |
+| 🛡️ **SIEM**          | Splunk Enterprise          | Centralized security analytics    |
+| 📡 **Collection**     | Splunk Universal Forwarder | Endpoint log forwarding           |
+| 🐧 **Endpoint**       | Ubuntu Linux               | Monitored SSH server              |
+| 🔴 **Testing**        | Kali Linux                 | Controlled security testing       |
+| 📄 **Telemetry**      | `/var/log/auth.log`        | Authentication event source       |
+| 🔎 **Detection**      | SPL                        | Security analytics and detections |
+| 🌐 **Protocol**       | SSH                        | Authentication service            |
+| 🔬 **Reconnaissance** | Nmap                       | SSH service validation            |
+| 📊 **Visualization**  | Splunk Dashboards          | SOC monitoring                    |
+| 🚨 **Alerting**       | Splunk Alerts              | Automated detection notification  |
+| ☁️ **Networking**     | AWS VPC / Security Groups  | Network segmentation and access   |
 
 ---
 
-### Phase 2 — Splunk Deployment
+## 🚀 Implementation Journey
 
-Splunk Enterprise was installed and configured as the centralized SIEM platform.
+### Phase 01 — Build the Infrastructure
 
-A dedicated index was created:
+AWS EC2 instances were deployed to host the Splunk Enterprise SIEM and monitored Ubuntu endpoint.
+
+AWS security groups were configured to control communication between components.
+
+```text
+Testing System ───── TCP/22 ─────► Ubuntu
+Ubuntu ───────────── TCP/9997 ───► Splunk
+SOC Analyst ──────── TCP/8000 ───► Splunk Web
+```
+
+---
+
+### Phase 02 — Deploy the SIEM
+
+Splunk Enterprise was configured as the centralized security monitoring platform.
+
+A dedicated security index was created:
 
 ```text
 linux_auth
 ```
 
-Splunk was configured to receive forwarded data on:
+The Splunk receiver was configured to accept forwarded telemetry on:
 
 ```text
 TCP/9997
@@ -330,243 +405,136 @@ TCP/9997
 
 ---
 
-### Phase 3 — Endpoint Log Collection
+### Phase 03 — Connect the Endpoint
 
-The Splunk Universal Forwarder was installed on the Ubuntu target server.
-
-The forwarder was configured to monitor:
+The Splunk Universal Forwarder was deployed to the Ubuntu server and configured to monitor:
 
 ```text
 /var/log/auth.log
 ```
 
-Authentication events were then forwarded to Splunk Enterprise.
+New authentication events are continuously forwarded to the SIEM.
 
 ---
 
-### Phase 4 — Data Validation
+### Phase 04 — Validate Telemetry
 
-Log ingestion was validated using:
+Before building detections, the ingestion pipeline was validated.
 
 ```spl
 index=linux_auth
 ```
 
-This confirmed that authentication events were successfully reaching Splunk.
-
----
-
-### Phase 5 — Controlled Attack Simulation
-
-Authentication testing was performed against the Ubuntu SSH service from the Kali Linux system.
-
-This generated security telemetry including:
-
-- Failed login attempts
-- Successful authentication
-- Invalid username activity
-- Repeated authentication attempts
-
----
-
-### Phase 6 — Detection Engineering
-
-Custom SPL queries were developed to analyze authentication behavior and identify suspicious patterns.
-
----
-
-### Phase 7 — Dashboard Development
-
-Detection results were integrated into a centralized SOC monitoring dashboard.
-
----
-
-### Phase 8 — Alerting
-
-Scheduled Splunk alerts were configured to automatically identify authentication activity exceeding predefined thresholds.
-
----
-
-# ☁️ AWS Infrastructure
-
-The lab uses AWS EC2 to host the Splunk Enterprise and Ubuntu target systems.
-
-The architecture includes:
+This confirmed the complete telemetry path:
 
 ```text
-AWS VPC
-│
-├── Splunk Enterprise EC2
-│   ├── Splunk Web
-│   ├── Splunk Indexer
-│   └── TCP Receiver
-│
-└── Ubuntu Target EC2
-    ├── OpenSSH
-    ├── auth.log
-    └── Splunk Universal Forwarder
+OpenSSH → auth.log → Universal Forwarder → Splunk → linux_auth
 ```
-
-Required communication includes:
-
-| Source | Destination | Port | Purpose |
-|---|---|---:|---|
-| Testing System | Ubuntu Target | 22 | SSH |
-| Ubuntu Target | Splunk Enterprise | 9997 | Log Forwarding |
-| Analyst | Splunk Enterprise | 8000 | Splunk Web |
-
-AWS security groups were configured to permit only the network communication required for the lab.
 
 ---
 
-# 📥 Log Collection Pipeline
+### Phase 05 — Generate Security Events
 
-Reliable log collection is the foundation of the project.
+Controlled SSH authentication testing generated representative security telemetry, including:
 
-The primary authentication log is:
-
-```text
-/var/log/auth.log
-```
-
-The ingestion pipeline is:
-
-```text
-SSH Event
-    │
-    ▼
-OpenSSH
-    │
-    ▼
-/var/log/auth.log
-    │
-    ▼
-Splunk Universal Forwarder
-    │
-    ▼
-TCP/9997
-    │
-    ▼
-Splunk Enterprise
-    │
-    ▼
-linux_auth
-```
-
-The Universal Forwarder continuously monitors the log file and sends new authentication events to the Splunk Enterprise server.
-
-This provides centralized visibility into Linux authentication activity.
+* Repeated authentication failures
+* Invalid username attempts
+* Successful authentication
+* High-volume authentication activity
 
 ---
 
-# 🧪 Attack Simulation
+### Phase 06 — Engineer Detections
 
-Controlled authentication testing was performed to validate the complete monitoring pipeline.
+Raw authentication logs were converted into actionable detections using custom SPL.
 
-The simulation followed this workflow:
+---
 
-```text
-Reconnaissance
-      │
-      ▼
-SSH Service Identification
-      │
-      ▼
-Controlled Authentication Testing
-      │
-      ▼
-Authentication Events Generated
-      │
-      ▼
-Events Written to auth.log
-      │
-      ▼
-Events Forwarded to Splunk
-      │
-      ▼
-Detection Rules Executed
-      │
-      ▼
-Dashboard Updated
-      │
-      ▼
-Alert Triggered
-```
+### Phase 07 — Build SOC Visibility
 
-The purpose of the simulation was to generate representative telemetry for defensive detection engineering.
+Detection results were integrated into a centralized Splunk dashboard to provide analyst visibility.
 
-All testing was performed exclusively against systems owned and controlled within the lab environment.
+---
+
+### Phase 08 — Operationalize Alerting
+
+Scheduled Splunk alerts automatically evaluate authentication telemetry and surface suspicious activity requiring investigation.
 
 ---
 
 # 🔎 Detection Engineering
 
-The core technical focus of this project is detection engineering.
+The core of this project is transforming **raw Linux authentication logs into actionable security detections**.
 
-Raw authentication events were transformed into actionable security information using custom SPL searches.
+Instead of relying only on individual events, the detection strategy analyzes authentication behavior across:
 
-The detection strategy focused on identifying:
+```text
+WHO?
+Targeted Username
 
-- Authentication failure spikes
-- Repeated failed login attempts
-- Suspicious source IP activity
-- Frequently targeted user accounts
-- Successful SSH authentications
-- Potential authentication success following repeated failures
+WHERE FROM?
+Source IP Address
 
-All SPL detection queries are maintained separately in the:
+WHAT?
+Authentication Result
+
+HOW OFTEN?
+Attempt Frequency
+
+WHEN?
+Authentication Timeline
+```
+
+All detection logic is version controlled under:
 
 ```text
 spl/
 ```
 
-directory.
+---
 
-This allows detection logic to be version-controlled independently from the documentation.
+## 🧠 Detection Catalog
+
+|     ID    | Detection              | Security Question                                 | Output                             |
+| :-------: | :--------------------- | :------------------------------------------------ | :--------------------------------- |
+| `DET-001` | Failed Login Trend     | Are authentication failures increasing?           | Time-based failure trend           |
+| `DET-002` | Successful Login Trend | When are successful logins occurring?             | Authentication baseline            |
+| `DET-003` | Top Source IPs         | Which sources generate the most failures?         | Ranked source IPs                  |
+| `DET-004` | Targeted Users         | Which accounts are being targeted?                | Ranked usernames                   |
+| `DET-005` | SSH Brute Force        | Which sources exceed failure thresholds?          | Suspicious source list             |
+| `DET-006` | Success After Failures | Did repeated failures precede a successful login? | Correlated authentication activity |
 
 ---
 
-# 🧠 Detection Catalog
+### `DET-001` · Failed SSH Login Trend
 
-## Detection 1 — Failed SSH Login Trend
-
-### Purpose
-
-Identify changes and spikes in failed SSH authentication activity.
+**Objective:** Identify spikes or unusual increases in failed SSH authentication activity.
 
 ```spl
 index=linux_auth "Failed password"
 | timechart count
 ```
 
-### SOC Use Case
-
-A sudden increase in authentication failures may indicate automated credential guessing or other suspicious authentication behavior.
+**Analyst value:** A sudden increase in failed authentication activity can indicate credential guessing or automated authentication attempts.
 
 ---
 
-## Detection 2 — Successful SSH Login Trend
+### `DET-002` · Successful SSH Login Trend
 
-### Purpose
-
-Monitor successful SSH authentications.
+**Objective:** Establish visibility into successful SSH authentications.
 
 ```spl
 index=linux_auth "Accepted password"
 | timechart count
 ```
 
-### SOC Use Case
-
-Successful login monitoring provides a baseline for legitimate authentication activity and supports investigations into potentially compromised accounts.
+**Analyst value:** Monitoring successful authentication helps establish normal behavior and supports investigations involving potentially compromised accounts.
 
 ---
 
-## Detection 3 — Top Attacking Source IPs
+### `DET-003` · Top Authentication Failure Sources
 
-### Purpose
-
-Identify source IP addresses generating the highest volume of failed authentication attempts.
+**Objective:** Identify source IP addresses responsible for the highest volume of failed authentication attempts.
 
 ```spl
 index=linux_auth "Failed password"
@@ -575,17 +543,13 @@ index=linux_auth "Failed password"
 | sort -count
 ```
 
-### SOC Use Case
-
-This allows analysts to quickly prioritize the most active suspicious sources.
+**Analyst value:** Prioritizes high-volume sources for investigation.
 
 ---
 
-## Detection 4 — Most Targeted Users
+### `DET-004` · Most Targeted Accounts
 
-### Purpose
-
-Identify user accounts receiving the highest number of failed authentication attempts.
+**Objective:** Identify user accounts receiving the highest number of failed authentication attempts.
 
 ```spl
 index=linux_auth "Failed password"
@@ -594,17 +558,13 @@ index=linux_auth "Failed password"
 | sort -count
 ```
 
-### SOC Use Case
-
-This provides visibility into accounts that may be specifically targeted during credential attacks.
+**Analyst value:** Highlights accounts that may be targeted during credential attacks.
 
 ---
 
-## Detection 5 — SSH Brute-Force Detection
+### `DET-005` · Potential SSH Brute Force
 
-### Purpose
-
-Identify source IP addresses exceeding the configured failed-login threshold.
+**Objective:** Detect sources exceeding a predefined failed authentication threshold.
 
 ```spl
 index=linux_auth "Failed password"
@@ -613,218 +573,203 @@ index=linux_auth "Failed password"
 | where count >= 5
 ```
 
-### Detection Threshold
+**Lab Threshold**
 
 ```text
-5 or more failed authentication attempts
+≥ 5 Failed Authentication Attempts
 ```
 
-### SOC Use Case
-
-The detection provides a simple threshold-based mechanism for identifying potential brute-force behavior.
-
-> Detection thresholds should be tuned for the environment. A production environment may require baselining, allowlists, time-window logic, and additional context to reduce false positives.
+> [!NOTE]
+> This threshold is intentionally simple for lab validation. Production environments should incorporate defined time windows, behavioral baselines, allowlists, asset context, identity context, and environment-specific tuning.
 
 ---
 
-## Detection 6 — Successful Login After Multiple Failures
+### `DET-006` · Successful Authentication After Multiple Failures
 
-### Purpose
+**Objective:** Identify authentication patterns where repeated failures may be followed by successful access.
 
-Identify scenarios where repeated authentication failures may be followed by a successful authentication.
-
-This use case is intended to help identify potential credential compromise and should correlate failure and success events using source IP, username, and time.
-
-The validated correlation query is maintained in:
+The validated correlation logic is maintained separately:
 
 ```text
 spl/06_successful_after_failures.spl
 ```
 
-### SOC Use Case
-
-A successful authentication following repeated failures may warrant higher-priority investigation than failed attempts alone.
+**Analyst value:** A successful authentication following repeated failures may represent a higher-risk event requiring additional investigation.
 
 ---
 
-# 📊 SOC Dashboard
+# 📊 SOC Command Center
 
-The **Enterprise SSH Threat Monitoring Dashboard** provides centralized visibility into authentication activity.
+<div align="center">
 
-The dashboard includes panels for:
+<img src="screenshots/dashboard/01-dashboard-overview.png" alt="Enterprise SSH Threat Monitoring Dashboard" width="100%">
 
-- Failed SSH Login Trend
-- Successful SSH Login Trend
-- Top Attacking IP Addresses
-- Most Targeted User Accounts
-- SSH Brute-Force Detection
-- Successful Authentication After Multiple Failures
+**Enterprise SSH Threat Monitoring Dashboard**
 
-The dashboard allows analysts to move from high-level monitoring to focused investigation.
+</div>
 
-A typical workflow is:
+The dashboard acts as the primary monitoring interface for the SOC analyst.
+
+### Dashboard Visibility
+
+| Panel                     | Analyst Question                                   |
+| :------------------------ | :------------------------------------------------- |
+| 📉 Failed SSH Login Trend | Is failed authentication activity increasing?      |
+| 📈 Successful Login Trend | When are successful authentications occurring?     |
+| 🌐 Top Source IPs         | Which sources generate the most failures?          |
+| 👤 Most Targeted Users    | Which accounts are being targeted?                 |
+| 🚨 Brute-Force Detection  | Which sources crossed the detection threshold?     |
+| 🔐 Success After Failures | Did suspicious failures lead to successful access? |
+
+### Investigation Pivot
 
 ```text
-Failed Login Spike
-        │
-        ▼
-Identify Source IP
-        │
-        ▼
-Identify Targeted User
-        │
-        ▼
-Review Authentication Timeline
-        │
-        ▼
-Check for Successful Login
-        │
-        ▼
-Investigate
+┌─────────────────────┐
+│ Failed Login Spike  │
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Identify Source IP  │
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Identify User       │
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Review Timeline     │
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Successful Login?   │
+└──────────┬──────────┘
+           ▼
+┌─────────────────────┐
+│ Investigate & Triage│
+└─────────────────────┘
 ```
 
 ---
 
-# 🚨 Automated Alerting
+# 🚨 Automated Detection & Alerting
 
-A scheduled Splunk alert was configured to automatically identify potential SSH brute-force activity.
-
-The alert uses threshold-based detection logic.
+The project demonstrates the transition from **passive monitoring** to **operational detection**.
 
 ```text
-Authentication Events
-        │
-        ▼
-Scheduled SPL Search
-        │
-        ▼
-Threshold Evaluation
-        │
-        ▼
-Results Found?
-      /     \
-    No       Yes
-    │         │
-    ▼         ▼
-Continue    Trigger Alert
-Monitoring     │
-               ▼
-        SOC Investigation
+Authentication Telemetry
+          │
+          ▼
+┌──────────────────────┐
+│ Scheduled SPL Search │
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ Evaluate Threshold   │
+└──────────┬───────────┘
+           ▼
+      Results Found?
+        /       \
+      NO         YES
+      │           │
+      ▼           ▼
+ Continue      Trigger
+Monitoring      Alert
+                  │
+                  ▼
+          SOC Investigation
 ```
 
-The alert configuration includes:
-
-| Setting | Configuration |
-|---|---|
-| Alert Type | Scheduled |
-| Detection | SSH Brute Force |
-| Trigger Condition | Results greater than zero |
-| Data Source | `linux_auth` |
-| Priority | High |
-
-This demonstrates the transition from passive log monitoring to automated security detection.
+| Configuration   | Value           |
+| :-------------- | :-------------- |
+| **Alert Type**  | Scheduled       |
+| **Detection**   | SSH Brute Force |
+| **Trigger**     | Results > 0     |
+| **Data Source** | `linux_auth`    |
+| **Priority**    | High            |
 
 ---
 
 # 🕵️ SOC Investigation Workflow
 
-When suspicious authentication activity is detected, an analyst can follow this investigation process.
+When a detection triggers, the investigation follows a structured process:
 
-### 1. Review the Alert
+**1️⃣ Alert Validation**
 
-Determine:
+Review the detection timestamp, source IP, event count, and trigger condition.
 
-- Detection time
-- Source IP
-- Number of failed attempts
+**2️⃣ Source Analysis**
 
-### 2. Identify Targeted Accounts
+Determine whether the source IP generated additional suspicious authentication activity.
 
-Determine which usernames were targeted by the suspicious source.
+**3️⃣ Account Analysis**
 
-### 3. Review Authentication Timeline
+Identify which user accounts were targeted.
 
-Analyze authentication events before and after the alert.
+**4️⃣ Timeline Reconstruction**
 
-### 4. Check for Successful Authentication
+Analyze authentication events before, during, and after the detection.
 
-Determine whether the suspicious source successfully authenticated.
+**5️⃣ Compromise Check**
 
-### 5. Investigate Additional Activity
+Determine whether the suspicious activity was followed by successful authentication.
 
-Review other available telemetry associated with the source or account.
+**6️⃣ Severity Assessment**
 
-### 6. Determine Severity
+Evaluate available evidence and classify the activity.
 
-Classify the activity based on available evidence.
+**7️⃣ Response**
 
-### 7. Respond
-
-In a production environment, potential response actions could include:
-
-- Blocking a malicious source
-- Disabling or protecting a compromised account
-- Resetting credentials
-- Reviewing endpoint activity
-- Escalating the incident
+In a production environment, possible actions may include blocking malicious sources, securing affected accounts, resetting credentials, reviewing endpoint telemetry, or escalating the incident.
 
 ---
 
-# 📸 Project Screenshots
+# 📸 Detection Evidence
 
-The following screenshots provide evidence of the implementation and validation of the lab.
+## 🖥️ Linux Authentication Telemetry
 
-> If a screenshot does not appear, verify that its filename matches the path below.
+<div align="center">
 
----
+<img src="screenshots/splunk/01-linux-auth-events.png" alt="Linux Authentication Events in Splunk" width="95%">
 
-## Splunk Enterprise Dashboard
+*Raw Linux authentication events successfully ingested into Splunk Enterprise.*
 
-<p align="center">
-  <img src="screenshots/dashboard/01-dashboard-overview.png" alt="Enterprise SSH Threat Monitoring Dashboard" width="100%">
-</p>
-
-The dashboard provides centralized visibility into Linux authentication activity and suspicious SSH behavior.
+</div>
 
 ---
 
-## Linux Authentication Events
+## 🚨 SSH Brute-Force Detection
 
-<p align="center">
-  <img src="screenshots/splunk/01-linux-auth-events.png" alt="Linux Authentication Events in Splunk" width="95%">
-</p>
+<div align="center">
 
-Authentication telemetry collected from `/var/log/auth.log` is forwarded to Splunk and indexed for analysis.
+<img src="screenshots/dashboard/02-brute-force-detection.png" alt="SSH Brute Force Detection" width="95%">
 
----
+*Custom SPL analytics identifying authentication sources exceeding the configured detection threshold.*
 
-## Brute-Force Detection
-
-<p align="center">
-  <img src="screenshots/dashboard/02-brute-force-detection.png" alt="SSH Brute Force Detection in Splunk" width="95%">
-</p>
-
-Custom SPL detection logic identifies sources generating authentication failures above the configured threshold.
+</div>
 
 ---
 
-## Successful Login Investigation
+## 🔐 Successful Login Investigation
 
-<p align="center">
-  <img src="screenshots/dashboard/03-success-after-failures.png" alt="Successful Authentication Investigation" width="95%">
-</p>
+<div align="center">
 
-Authentication correlation can help analysts identify potentially suspicious successful logins occurring around repeated authentication failures.
+<img src="screenshots/dashboard/03-success-after-failures.png" alt="Successful Login After Authentication Failures" width="95%">
+
+*Authentication correlation supporting investigation of successful access around repeated failures.*
+
+</div>
 
 ---
 
-## Alert Trigger History
+## 🔔 Alert Trigger History
 
-<p align="center">
-  <img src="screenshots/alerts/02-alert-trigger-history.png" alt="Splunk Alert Trigger History" width="95%">
-</p>
+<div align="center">
 
-Scheduled alerts automatically surface suspicious authentication activity for analyst investigation.
+<img src="screenshots/alerts/02-alert-trigger-history.png" alt="Splunk Alert Trigger History" width="95%">
+
+*Scheduled Splunk detections automatically surfacing suspicious authentication behavior.*
+
+</div>
 
 ---
 
@@ -833,12 +778,12 @@ Scheduled alerts automatically surface suspicious authentication activity for an
 ```text
 Enterprise-SSH-Threat-Monitoring/
 │
-├── README.md
-├── LICENSE
-├── .gitignore
-├── CHANGELOG.md
+├── 📄 README.md
+├── 📄 LICENSE
+├── 📄 CHANGELOG.md
+├── 📄 .gitignore
 │
-├── docs/
+├── 📚 docs/
 │   ├── 01_Project_Overview.md
 │   ├── 02_Lab_Architecture.md
 │   ├── 03_AWS_Deployment.md
@@ -850,12 +795,12 @@ Enterprise-SSH-Threat-Monitoring/
 │   ├── 09_Alerting.md
 │   └── 10_Lessons_Learned.md
 │
-├── diagrams/
+├── 🏗️ diagrams/
 │   ├── architecture.drawio
 │   ├── architecture.png
 │   └── architecture.svg
 │
-├── spl/
+├── 🔎 spl/
 │   ├── 01_failed_login_trend.spl
 │   ├── 02_successful_login_trend.spl
 │   ├── 03_top_attacking_ips.spl
@@ -865,258 +810,217 @@ Enterprise-SSH-Threat-Monitoring/
 │   ├── 07_authentication_statistics.spl
 │   └── 08_recent_security_events.spl
 │
-├── screenshots/
+├── 📸 screenshots/
 │   ├── aws/
 │   ├── splunk/
 │   ├── attacks/
 │   ├── dashboard/
 │   └── alerts/
 │
-└── images/
+└── 🖼️ images/
 ```
 
 ---
 
-# 📚 Documentation
+# 💡 Key Engineering Lessons
 
-Detailed technical documentation is available in the `docs/` directory.
+### 01 · Telemetry Before Detection
 
-| Document | Description |
-|---|---|
-| `01_Project_Overview.md` | Project objectives, scope, and business problem |
-| `02_Lab_Architecture.md` | Architecture and component design |
-| `03_AWS_Deployment.md` | AWS infrastructure deployment |
-| `04_Splunk_Configuration.md` | Splunk Enterprise configuration |
-| `05_Log_Collection.md` | Authentication log ingestion pipeline |
-| `06_Attack_Simulation.md` | Controlled attack simulation and validation |
-| `07_Detection_Engineering.md` | SPL detection design |
-| `08_Dashboard.md` | SOC dashboard implementation |
-| `09_Alerting.md` | Automated alerting workflow |
-| `10_Lessons_Learned.md` | Technical challenges and lessons learned |
+A detection is only as reliable as the data feeding it.
 
----
-
-# 💡 Skills Demonstrated
-
-This project demonstrates hands-on experience with:
-
-### Security Operations
-
-- SOC Monitoring
-- Security Event Analysis
-- Alert Investigation
-- Incident Triage
-- Authentication Monitoring
-
-### SIEM
-
-- Splunk Enterprise
-- Splunk Universal Forwarder
-- Log Ingestion
-- Index Management
-- SPL
-- Dashboard Development
-- Alert Engineering
-
-### Detection Engineering
-
-- Detection Rule Development
-- Threshold-Based Detection
-- Authentication Analysis
-- Detection Validation
-- Security Event Correlation
-
-### Cloud
-
-- AWS EC2
-- AWS VPC
-- AWS Security Groups
-- Cloud Networking
-
-### Linux
-
-- Ubuntu Administration
-- OpenSSH
-- Linux Authentication Logs
-- Service Configuration
-- Log Analysis
-
-### Security Testing
-
-- Kali Linux
-- Nmap
-- Controlled Authentication Testing
-- Attack Simulation
-
-### Engineering
-
-- Git
-- GitHub
-- Technical Documentation
-- Architecture Design
-- Version Control
-
----
-
-# 🧠 Lessons Learned
-
-Several important lessons emerged while building the project.
-
-### Reliable Telemetry Comes First
-
-Detection engineering depends on reliable data collection.
-
-Before building detections, the complete ingestion pipeline had to be validated:
+The ingestion pipeline must first be validated end to end:
 
 ```text
-Log Source → Forwarder → Network → Receiver → Index → Search
+Log Source
+    ↓
+Forwarder
+    ↓
+Network
+    ↓
+Receiver
+    ↓
+Index
+    ↓
+Search
+    ↓
+Detection
 ```
 
-### Cloud Defaults Affect Security Testing
+---
 
-Ubuntu cloud images may use SSH configurations that differ from traditional Linux installations.
+### 02 · A Search Is Not Automatically a Detection
 
-Understanding effective SSH configuration was necessary to validate authentication telemetry.
+A query returning results does not necessarily represent reliable detection logic.
 
-### Detection Rules Require Validation
+Effective detections require:
 
-A query returning results does not automatically make it a reliable detection.
-
-Detection logic must be tested against representative telemetry and reviewed for false positives and false negatives.
-
-### Dashboards Should Support Decisions
-
-The purpose of a SOC dashboard is not simply to display data.
-
-Each panel should help answer an investigation question.
-
-### Alerts Require Tuning
-
-Static thresholds are useful for demonstrating detection concepts, but production detections require tuning based on environment size, user behavior, expected traffic, and historical baselines.
+* Representative test telemetry
+* Threshold tuning
+* False-positive analysis
+* False-negative analysis
+* Environmental context
 
 ---
 
-# ✅ Version 1.0
+### 03 · Detection Context Matters
 
-Version 1.0 establishes the foundation of the Enterprise SSH Threat Monitoring project.
+A single failed login has limited investigative value.
 
-### Completed
+Correlating multiple dimensions provides stronger context:
 
-- AWS Infrastructure Deployment
-- Splunk Enterprise Deployment
-- Splunk Universal Forwarder Configuration
-- Linux Authentication Log Collection
-- SSH Security Monitoring
-- Controlled Attack Simulation
-- SPL Detection Engineering
-- SOC Dashboard
-- Scheduled Alerting
-- Technical Documentation
-- Architecture Documentation
-- Version-Controlled Detection Queries
+```text
+Source IP + Username + Frequency + Result + Time
+```
 
 ---
 
-# 🛣️ Future Roadmap
+### 04 · Dashboards Should Answer Questions
 
-Future versions may expand the monitoring environment with additional detection and response capabilities.
+A SOC dashboard should not exist simply to display charts.
 
-## Version 2.0 — Advanced Linux Detection Engineering
-
-Planned areas include:
-
-- Password spraying detection
-- Privilege escalation monitoring
-- Suspicious `sudo` activity
-- New user account monitoring
-- SSH configuration change monitoring
-- Advanced authentication correlation
-
-## Version 3.0 — Threat Intelligence
-
-Potential capabilities:
-
-- IP reputation enrichment
-- Threat intelligence feeds
-- Suspicious source prioritization
-- Automated enrichment workflows
-
-## Version 4.0 — Threat Hunting
-
-Potential additions:
-
-- Dedicated threat hunting queries
-- Authentication anomaly hunting
-- Historical attacker analysis
-- Behavioral baselining
-
-## Version 5.0 — Expanded SOC Environment
-
-Potential expansion:
-
-- Windows endpoint monitoring
-- Sysmon telemetry
-- Additional endpoint log sources
-- Cross-platform detection engineering
-- SOAR integration
-- Incident response automation
+Every panel should help an analyst make an investigation decision.
 
 ---
 
-# 🔐 Security Considerations
+### 05 · Alerting Requires Tuning
 
-This repository is intended for cybersecurity education, defensive security research, and authorized lab testing.
+Static thresholds provide a useful starting point for detection validation.
 
-All attack simulations documented in this project were conducted within systems specifically configured and authorized for testing.
-
-Do not use security testing techniques against systems without explicit authorization.
-
-Sensitive information such as:
-
-- AWS credentials
-- Private keys
-- Access tokens
-- Passwords
-- Account identifiers
-
-should never be committed to a public repository.
+Production detections require baselines, allowlists, asset criticality, identity context, historical behavior, and environment-specific tuning.
 
 ---
 
-# 🤝 Contributing
+# 🧰 Skills Demonstrated
 
-This project is primarily maintained as a cybersecurity portfolio and research lab.
+`Splunk Enterprise` `SPL` `SIEM` `Detection Engineering` `SOC Operations` `AWS EC2` `Linux` `Ubuntu` `Kali Linux` `SSH` `Log Analysis` `Threat Hunting` `Incident Triage` `Dashboard Engineering` `Security Alerting` `Git` `GitHub`
 
-Suggestions for improving detection logic, dashboard design, documentation, and defensive monitoring workflows are welcome.
+---
+
+# 🛣️ Project Roadmap
+
+```text
+                    ┌──────────────────────────┐
+                    │       VERSION 1.0        │
+                    │ SSH Threat Monitoring    │
+                    │       COMPLETED ✅       │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │       VERSION 2.0        │
+                    │ Advanced Linux Detection │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │       VERSION 3.0        │
+                    │  Threat Intelligence     │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │       VERSION 4.0        │
+                    │     Threat Hunting       │
+                    └────────────┬─────────────┘
+                                 │
+                                 ▼
+                    ┌──────────────────────────┐
+                    │       VERSION 5.0        │
+                    │  Expanded SOC Platform   │
+                    └──────────────────────────┘
+```
+
+### ✅ Version 1.0 — Current
+
+* AWS-hosted monitoring environment
+* Splunk Enterprise deployment
+* Universal Forwarder integration
+* Linux authentication telemetry
+* SSH threat monitoring
+* Controlled attack simulation
+* Custom SPL detections
+* SOC dashboard
+* Scheduled alerting
+* Investigation workflow
+
+### 🔜 Version 2.0 — Advanced Linux Detection
+
+* Password spraying detection
+* Suspicious `sudo` activity
+* Privilege escalation monitoring
+* New account creation monitoring
+* SSH configuration change detection
+* Advanced authentication correlation
+
+### 🌐 Version 3.0 — Threat Intelligence
+
+* IP reputation enrichment
+* Threat intelligence feeds
+* Suspicious source prioritization
+* Automated enrichment workflows
+
+### 🔍 Version 4.0 — Threat Hunting
+
+* Dedicated hunting queries
+* Authentication anomaly hunting
+* Historical source analysis
+* Behavioral baselining
+
+### 🤖 Version 5.0 — Expanded SOC Platform
+
+* Windows endpoint monitoring
+* Sysmon telemetry
+* Cross-platform detection engineering
+* Additional security telemetry
+* SOAR integration
+* Automated incident response
+
+---
+
+# 🔐 Responsible Use
+
+This repository is intended exclusively for:
+
+* Cybersecurity education
+* Defensive security research
+* Detection engineering
+* Authorized security testing
+* SOC training
+
+All attack simulations documented in this project were conducted against systems specifically configured and authorized for testing.
+
+Never perform security testing against systems without explicit authorization.
+
+Sensitive information including AWS credentials, private keys, passwords, access tokens, and account identifiers should never be committed to a public repository.
 
 ---
 
 # 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
 
-See the `LICENSE` file for details.
+See the `LICENSE` file for additional details.
 
 ---
 
 # 👤 Author
 
+<div align="center">
+
 ## Ravi Kiran Kambhampati
 
-**Cybersecurity | SOC Operations | Detection Engineering | Cloud Security**
+### Cybersecurity · SOC Operations · Detection Engineering · Cloud Security
 
-This project was developed as part of a hands-on cybersecurity portfolio focused on building practical skills in SIEM engineering, security monitoring, detection development, cloud infrastructure, and Security Operations Center workflows.
+This project is part of a hands-on cybersecurity portfolio focused on building practical experience in **SIEM engineering, security monitoring, detection development, cloud security, and SOC investigation workflows**.
+
+<br>
 
 ---
 
-<p align="center">
-  <strong>Enterprise SSH Threat Monitoring using Splunk</strong>
-</p>
+### 🛡️ Enterprise SSH Threat Monitoring & Detection Engineering
 
-<p align="center">
-  From Authentication Telemetry → Detection → Alert → Investigation
-</p>
+**Authentication Telemetry → Detection → Alert → Investigation**
 
-<p align="center">
-  Version 1.0
-</p>
+`Version 1.0`
+
+</div>
