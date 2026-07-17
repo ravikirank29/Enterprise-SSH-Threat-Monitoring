@@ -1,0 +1,8 @@
+index=linux_auth ("Failed password" OR "Accepted password")
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| rex "for (invalid user )?(?<username>\S+)"
+| eval event_type=if(searchmatch("Accepted password"),"Success","Failure")
+| sort 0 _time
+| streamstats count(eval(event_type="Failure")) AS previous_failures by src_ip username
+| where event_type="Success" AND previous_failures>=3
+| table _time src_ip username previous_failures

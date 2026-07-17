@@ -1,0 +1,2 @@
+index=linux_auth "Accepted password"
+| timechart span=5m count AS "Successful SSH Logins"

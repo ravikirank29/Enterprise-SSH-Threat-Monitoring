@@ -1,0 +1,5 @@
+index=linux_auth "Failed password"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count AS failed_attempts values(user) AS targeted_users by src_ip
+| where failed_attempts >= 5
+| sort - failed_attempts
