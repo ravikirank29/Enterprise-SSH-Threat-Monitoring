@@ -97,15 +97,17 @@ SOC Investigation
 - [Log Collection Pipeline](#-log-collection-pipeline)
 - [Attack Simulation](#-attack-simulation)
 - [Detection Engineering](#-detection-engineering)
-- [Detection Catalog](#-detection-catalog)
-- [SOC Dashboard](#-soc-dashboard)
+- [Detection Catalog & Use Cases](#-detection-catalog--use-cases)
+- [SOC Monitoring Dashboard](#-soc-monitoring-dashboard)
 - [Automated Alerting](#-automated-alerting)
+- [Detection Query Validation](#-detection-query-validation)
 - [SOC Investigation Workflow](#️-soc-investigation-workflow)
-- [Project Screenshots](#-project-screenshots)
+- [Implementation Evidence](#-implementation-evidence)
 - [Repository Structure](#️-repository-structure)
 - [Documentation](#-documentation)
-- [Skills Demonstrated](#-skills-demonstrated)
-- [Lessons Learned](#-lessons-learned)
+- [Key Outcomes](#-key-outcomes)
+- [Technical Skills Demonstrated](#-technical-skills-demonstrated)
+- [Engineering Lessons Learned](#-engineering-lessons-learned)
 - [Version 1.0](#-version-10)
 - [Future Roadmap](#️-future-roadmap)
 - [Security Considerations](#-security-considerations)
@@ -551,7 +553,7 @@ Controlled security testing was performed to generate realistic authentication e
 Nmap was used within the authorized lab to verify that the target SSH service was reachable.
 
 <p align="center">
-  <img src="screenshots/splunk/09-nmap-scan.png" alt="Nmap SSH Service Validation" width="90%">
+  <img src="screenshots/attacks/09-nmap-scan.png" alt="Nmap SSH Service Validation" width="90%">
 </p>
 
 ## Controlled Authentication Testing
