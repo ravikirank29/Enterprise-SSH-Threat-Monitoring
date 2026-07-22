@@ -1,41 +1,88 @@
 # Changelog
 
-All notable changes to the Enterprise SSH Threat Monitoring project are documented in this file.
+All notable updates to this project are documented in this file.
 
-## [1.0.0] - 2026-07-17
+This project follows continuous improvements in architecture, detection engineering, automation, and documentation.
 
-### Added
+---
 
-- AWS-based SOC lab infrastructure
-- Splunk Enterprise SIEM deployment
-- Ubuntu Linux target server
-- Splunk Universal Forwarder integration
-- Centralized `/var/log/auth.log` collection
-- Dedicated `linux_auth` Splunk index
-- SSH authentication monitoring
-- Controlled attack simulation
-- Nmap reconnaissance validation
+## Added
+
+### Detection Engineering
+
+- Custom SPL detection rules
 - SSH brute-force detection
-- Failed login trend detection
-- Successful login monitoring
-- Top attacking IP analysis
-- Most targeted user analysis
-- Successful login after failures investigation
-- Enterprise SSH Threat Monitoring dashboard
-- Scheduled brute-force alerting
-- Version-controlled SPL detection queries
-- Architecture diagram
-- Complete technical documentation
-- Project screenshot gallery
-- Professional project README
+- Successful login after repeated failures detection
+- Attacker IP analytics
+- Targeted user analytics
 
-## Planned [2.0.0]
+### Threat Intelligence
 
-- Advanced Linux detection engineering
-- Password spraying detection
-- Privilege escalation monitoring
-- Suspicious sudo activity detection
-- SSH configuration change monitoring
-- MITRE ATT&CK mapping
-- Threat intelligence enrichment
-- Advanced threat hunting queries
+- AbuseIPDB REST API integration
+- Automated IP reputation enrichment
+- CSV lookup generation
+- Splunk lookup integration
+
+### Automation
+
+- Python automation scripts
+- Splunk SDK integration
+- REST API integration
+- Automated lookup generation and deployment
+
+### Dashboards
+
+- Authentication monitoring dashboard
+- SSH brute-force visualizations
+- Attacker IP analytics panels
+- Targeted user analytics panels
+- Threat intelligence dashboard panels
+
+### Infrastructure
+
+- AWS EC2 deployment
+- Splunk Enterprise server
+- Ubuntu monitoring server
+- Kali Linux attack workstation
+- Splunk Universal Forwarder
+- Linux authentication monitoring
+
+### Documentation
+
+- Project architecture documentation
+- AWS deployment guide
+- Splunk configuration guide
+- Detection engineering documentation
+- Threat intelligence documentation
+- Investigation workflow
+- Project screenshots
+
+---
+
+## Improved
+
+- Repository organization
+- Project documentation
+- Dashboard layout
+- Detection coverage
+- Automation reliability
+- Investigation workflow
+
+---
+
+## Fixed
+
+- SPL search queries
+- Log parsing reliability
+- Lookup generation
+- Splunk forwarding configuration
+- Documentation inconsistencies
+
+---
+
+## Security
+
+- Least-privilege AWS Security Groups
+- Secure API key handling
+- Environment variable configuration
+- Repository security best practices

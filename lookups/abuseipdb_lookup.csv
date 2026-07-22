@@ -1,0 +1,14 @@
+ip,abuseConfidenceScore,countryCode,countryName,isp,domain,usageType,totalReports,lastReportedAt
+101.50.83.146,100,PK,Pakistan,Nayatel (Pvt) Ltd,nayatel.com,Fixed Line ISP,182,2026-07-20T00:59:15+00:00
+112.85.70.28,100,CN,China,"JIANGSU GROUP CO.,NANJING,JIANGSU PROVINCE",chinaunicom.cn,Fixed Line ISP,38,2026-07-20T00:46:56+00:00
+115.190.161.6,100,CN,China,"Beijing Volcano Engine Technology Co., Ltd.",gwbn.net.cn,Data Center/Web Hosting/Transit,885,2026-07-20T00:16:09+00:00
+120.48.24.187,100,CN,China,"Beijing Baidu Netcom Science and Technology Co., Ltd.",baidu.com,Data Center/Web Hosting/Transit,365,2026-07-19T22:45:17+00:00
+154.83.14.209,100,HK,Hong Kong,Yisu Cloud Ltd,cloudinnovation.org,Data Center/Web Hosting/Transit,402,2026-07-19T23:36:28+00:00
+173.35.86.46,0,CA,Canada,Rogers Cable Inc. FLFRD,rogers.com,Fixed Line ISP,0,
+182.43.19.187,100,CN,China,CHINANET SHANDONG PROVINCE NETWORK,chinatelecom.cn,Data Center/Web Hosting/Transit,584,2026-07-20T00:29:55+00:00
+47.236.230.104,100,SG,Singapore,Alibaba Cloud LLC,alibaba-inc.com,Data Center/Web Hosting/Transit,309,2026-07-19T16:15:34+00:00
+47.243.213.8,100,HK,Hong Kong,ALIBABA CLOUD - HK,alibabacloud.com,Data Center/Web Hosting/Transit,325,2026-07-19T23:20:19+00:00
+80.94.92.179,100,RO,Romania,TECHOFF SRV LIMITED,dmzhost.co,Data Center/Web Hosting/Transit,11310,2026-07-20T00:55:04+00:00
+82.97.253.89,100,RU,Russian Federation,"Timeweb, LLP",timewebcloud.kz,Data Center/Web Hosting/Transit,149,2026-07-19T07:04:09+00:00
+91.92.40.29,100,NL,Netherlands,TechTies Inc.,tech-ties.net,Data Center/Web Hosting/Transit,3168,2026-07-20T00:58:29+00:00
+91.92.40.44,100,NL,Netherlands,TechTies Inc.,tech-ties.net,Data Center/Web Hosting/Transit,2937,2026-07-20T00:57:15+00:00

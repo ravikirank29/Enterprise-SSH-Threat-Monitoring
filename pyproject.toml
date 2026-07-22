@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.pytest.ini_options]
+testpaths = ["scripts"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v"
