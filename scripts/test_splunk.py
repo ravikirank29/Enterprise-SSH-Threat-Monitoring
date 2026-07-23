@@ -1,8 +1,30 @@
+"""
+Integration test for Splunk.
+
+Requires:
+- Running Splunk Enterprise
+- Port 8089 accessible
+- Valid credentials in config/.env
+
+Skipped automatically in GitHub Actions.
+"""
+
+import os
+
+import pytest
+
+if os.getenv("CI"):
+    pytest.skip(
+        "Skipping Splunk integration tests in CI.",
+        allow_module_level=True,
+    )
+
 from splunk_client import get_unique_failed_ips
 
-ips = get_unique_failed_ips()
 
-print("\nUnique attacker IPs\n")
+def test_get_unique_failed_ips():
+    """Verify Splunk connection and returned data."""
 
-for ip in ips:
-    print(ip)
+    ips = get_unique_failed_ips()
+
+    assert isinstance(ips, list)
