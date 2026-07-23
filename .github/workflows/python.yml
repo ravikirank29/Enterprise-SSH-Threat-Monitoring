@@ -36,8 +36,8 @@ jobs:
           API_KEY=test_api_key
           SPLUNK_HOST=localhost
           SPLUNK_PORT=8089
-          SPLUNK_USERNAME=admin
-          SPLUNK_PASSWORD=changeme
+          SPLUNK_USERNAME=root
+          SPLUNK_PASSWORD=KRAVIKIRAN
           EOF
 
       - name: Run Tests
