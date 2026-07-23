@@ -18,7 +18,7 @@
 
 ## 📚 Table of Contents
 
-- [�️ Enterprise SSH Threat Monitoring \& Detection Engineering using Splunk](#️-enterprise-ssh-threat-monitoring--detection-engineering-using-splunk)
+- [🛡️ Enterprise SSH Threat Monitoring \& Detection Engineering using Splunk](#️-enterprise-ssh-threat-monitoring--detection-engineering-using-splunk)
   - [📚 Table of Contents](#-table-of-contents)
 - [📌 Executive Overview](#-executive-overview)
 - [🎯 Project Objectives](#-project-objectives)
@@ -28,7 +28,7 @@
   - [🐍 Python Automation](#-python-automation)
 - [🏗️ High-Level Architecture](#️-high-level-architecture)
 - [🔄 End-to-End Workflow](#-end-to-end-workflow)
-  - [*Figure: End-to-end workflow illustrating log collection, detection, enrichment, and SOC investigation.*](#figure-end-to-end-workflow-illustrating-log-collection-detection-enrichment-and-soc-investigation)
+  - [](#)
 - [🛠️ Technology Stack](#️-technology-stack)
 - [📂 Repository Structure](#-repository-structure)
 - [☁️ AWS Infrastructure](#️-aws-infrastructure)
@@ -229,7 +229,9 @@ Threat Intelligence Lookup
 SOC Dashboard & Investigation
 ```
 
-*Figure: End-to-end workflow illustrating log collection, detection, enrichment, and SOC investigation.*
+<p align="center">
+  <em>Figure 2. End-to-end workflow illustrating log collection, detection, enrichment, and SOC investigation.</em>
+</p>
 ---
 
 # 🛠️ Technology Stack
