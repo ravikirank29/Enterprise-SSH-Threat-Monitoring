@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir -p config
           cat > config/.env << EOF
-          API_KEY=test_api_key
+          API_KEY=2APH%UQQc8HfG7q;Ncv1Bf$*vBu5g*ZB
           SPLUNK_HOST=localhost
           SPLUNK_PORT=8089
           SPLUNK_USERNAME=root
