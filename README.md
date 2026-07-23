@@ -6,13 +6,25 @@
        width="100%">
 </p>
 
-![Platform](https://img.shields.io/badge/Platform-AWS-orange)
-![OS](https://img.shields.io/badge/OS-Ubuntu%2024.04-E95420)
-![SIEM](https://img.shields.io/badge/SIEM-Splunk-000000)
-![Language](https://img.shields.io/badge/Python-3.12-blue)
-![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-blue)
 
+<p align="center">
+  <img src="https://img.shields.io/badge/AWS-EC2-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white" alt="AWS EC2">
+  <img src="https://img.shields.io/badge/Ubuntu-24.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white" alt="Ubuntu 24.04">
+  <img src="https://img.shields.io/badge/Splunk-Enterprise-000000?style=for-the-badge&logo=splunk&logoColor=65A637" alt="Splunk Enterprise">
+  <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=FFD43B" alt="Python 3.12">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/MITRE-ATT%26CK-CB2027?style=for-the-badge" alt="MITRE ATT&CK">
+  <img src="https://img.shields.io/badge/Threat_Intelligence-AbuseIPDB-2D7FF9?style=for-the-badge" alt="AbuseIPDB">
+  <img src="https://img.shields.io/badge/Detection-Engineering-0A66C2?style=for-the-badge" alt="Detection Engineering">
+  <img src="https://img.shields.io/badge/SOC-Operations-0052CC?style=for-the-badge" alt="SOC Operations">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Completed-success?style=for-the-badge" alt="Completed">
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License">
+</p>
 
 ---
 
