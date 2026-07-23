@@ -33,12 +33,18 @@ jobs:
         run: |
           mkdir -p config
           cat > config/.env << EOF
-          API_KEY=2APH%UQQc8HfG7q;Ncv1Bf$*vBu5g*ZB
+          ABUSEIPDB_API_KEY=2APH%UQQc8HfG7q;Ncv1Bf$*vBu5g*ZB
           SPLUNK_HOST=localhost
           SPLUNK_PORT=8089
           SPLUNK_USERNAME=root
           SPLUNK_PASSWORD=KRAVIKIRAN
           EOF
+
+      - name: Verify Environment File
+        run: |
+          echo "========== config/.env =========="
+          cat config/.env
+          echo "================================="
 
       - name: Run Tests
         run: |
