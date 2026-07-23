@@ -1,553 +1,864 @@
-# Enterprise SSH Threat Monitoring & Detection Engineering with Splunk
+# 🛡️ Enterprise SSH Threat Monitoring & Detection Engineering using Splunk
 
 <p align="center">
-  <img src="images/banner.png" alt="Enterprise SOC Banner" width="100%">
+  <img src="images/banner.png"
+       alt="Enterprise SSH Threat Monitoring and Detection Engineering project banner"
+       width="100%">
 </p>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/AWS-EC2-FF9900?logo=amazonaws&logoColor=white" alt="AWS">
-  <img src="https://img.shields.io/badge/Splunk-Enterprise-65A637?logo=splunk&logoColor=white" alt="Splunk">
-  <img src="https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/Ubuntu-24.04-E95420?logo=ubuntu&logoColor=white" alt="Ubuntu">
-  <img src="https://img.shields.io/badge/Kali-Linux-557C94?logo=kalilinux&logoColor=white" alt="Kali Linux">
-  <img src="https://img.shields.io/badge/MITRE-ATT%26CK-8B0000" alt="MITRE ATT&CK">
-  <img src="https://img.shields.io/badge/Detection-Engineering-1f6feb" alt="Detection Engineering">
-  <img src="https://img.shields.io/badge/License-MIT-2ea44f" alt="License">
-</p>
+![Platform](https://img.shields.io/badge/Platform-AWS-orange)
+![OS](https://img.shields.io/badge/OS-Ubuntu%2024.04-E95420)
+![SIEM](https://img.shields.io/badge/SIEM-Splunk-000000)
+![Language](https://img.shields.io/badge/Python-3.12-blue)
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-<p align="center"><b>Enterprise SOC Project · Splunk SIEM · Detection Engineering · Threat Intelligence · Python Automation</b></p>
-
-<p align="center">
-  <a href="#-executive-overview">Overview</a> ·
-  <a href="#-solution-architecture">Architecture</a> ·
-  <a href="#-detection-catalog">Detections</a> ·
-  <a href="#-python-automation">Automation</a> ·
-  <a href="#-soc-dashboards">Dashboards</a> ·
-  <a href="#-skills-demonstrated">Skills</a> ·
-  <a href="#-author">Author</a>
-</p>
 
 ---
 
-## 📖 Executive Overview
+## 📚 Table of Contents
 
-Security Operations Centers process millions of events daily — detecting malicious activity takes more than log collection; it requires correlation, enrichment, automation, and actionable intelligence.
-
-This project shows how a modern SOC detects, investigates, and prioritizes SSH authentication attacks using **Splunk Enterprise**, **Python automation**, and **threat intelligence enrichment**, all inside an AWS-hosted lab.
-
-The environment continuously collects Linux authentication logs from an Ubuntu server, forwards them into Splunk, detects suspicious SSH activity with custom SPL analytics, enriches attacker IPs with AbuseIPDB reputation data, and surfaces investigation-ready dashboards for analysts.
-
-The focus throughout is **detection engineering** — building analytics that turn raw authentication logs into meaningful, MITRE-aligned detections rather than relying on out-of-the-box rules.
-
-**This project demonstrates:**
-
-| | | |
-|---|---|---|
-| Centralized log collection | Enterprise SIEM deployment | Detection engineering |
-| Threat intelligence enrichment | Python automation | Splunk SDK integration |
-| MITRE ATT&CK mapping | Automated lookup generation | SOC dashboards & alerting |
-
-The end goal is to simulate how enterprise security teams identify, investigate, and prioritize SSH brute-force attacks while reducing manual analysis through automation.
-
----
-
-## 🎯 Objectives
-
-- Deploy enterprise infrastructure in AWS and configure Splunk Enterprise + Universal Forwarder
-- Collect Linux authentication logs and simulate SSH attacks from Kali Linux
-- Develop custom SPL detections for brute force, password spraying, and targeted account attacks
-- Detect successful logins that follow repeated failures
-- Enrich attacker IPs using threat intelligence, automated end-to-end with Python
-- Build investigation dashboards, scheduled alerts, and MITRE ATT&CK-mapped detections
-- Demonstrate a complete SOC investigation workflow, start to finish
-
----
-
-## ⭐ Highlights
-
-| Capability | Description |
-|---|---|
-| ☁️ **AWS Infrastructure** | Amazon EC2 deployment |
-| 📊 **SIEM** | Splunk Enterprise |
-| 📥 **Log Collection** | Splunk Universal Forwarder |
-| 🔍 **Detection Engineering** | Custom SPL analytics |
-| 🌍 **Threat Intelligence** | AbuseIPDB REST API |
-| 🐍 **Automation** | Python + Splunk SDK |
-| 📄 **Lookup Tables** | Automated CSV generation |
-| 🚨 **Alerting** | Scheduled Splunk searches |
-| 📈 **Dashboards** | SOC investigation dashboards |
-| 🛡️ **Framework** | MITRE ATT&CK |
-
----
-
-## 🏆 Key Features
-
-**Security Monitoring** — Linux authentication and SSH login monitoring, failed/successful auth detection, source IP tracking, user account monitoring.
-
-**Detection Engineering** — Custom SPL detections for brute force, password spraying, high-volume failures, post-failure successful logins, targeted accounts, and high-confidence malicious IPs.
-
-**Threat Intelligence** — AbuseIPDB queries for IP reputation, abuse confidence scores, ISP and geolocation data, and historical abuse reports — enriching Splunk searches automatically.
-
-**Automation** — Python handles Splunk SDK searches, IP extraction, AbuseIPDB requests, JSON parsing, lookup generation, CSV updates, and error handling end-to-end.
-
----
-
-## 🛠️ Technology Stack
-
-| Category | Technology |
-|---|---|
-| Cloud | AWS EC2 |
-| Operating System | Ubuntu Server 24.04 |
-| SIEM | Splunk Enterprise |
-| Log Forwarding | Splunk Universal Forwarder |
-| Attack Platform | Kali Linux |
-| Language | Python 3 |
-| Detection | SPL |
-| Threat Intelligence | AbuseIPDB |
-| API | REST |
-| Automation | Splunk SDK |
-| Framework | MITRE ATT&CK |
-| Version Control | Git |
-
----
-
-## 📂 Repository Structure
-
-```text
-splunk-threat-intel/
-│
-├── docs/
-│   ├── architecture/
-│   ├── dashboards/
-│   ├── detections/
-│   ├── setup/
-│   └── screenshots/
-│
-├── images/
-│   ├── architecture.png
-│   ├── dashboard.png
-│   ├── detection.png
-│   └── banner.png
-│
-├── lookups/
-│   └── abuseipdb_lookup.csv
-│
-├── scripts/
-│   ├── abuseipdb.py
-│   ├── lookup_builder.py
-│   └── main.py
-│
-├── searches/
-│   ├── DET-001.spl
-│   ├── DET-002.spl
-│   ├── DET-003.spl
-│   ├── DET-004.spl
-│   ├── DET-005.spl
-│   ├── DET-006.spl
-│   └── DET-007.spl
-│
-├── LICENSE
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
+- [�️ Enterprise SSH Threat Monitoring \& Detection Engineering using Splunk](#️-enterprise-ssh-threat-monitoring--detection-engineering-using-splunk)
+  - [📚 Table of Contents](#-table-of-contents)
+- [📌 Executive Overview](#-executive-overview)
+- [🎯 Project Objectives](#-project-objectives)
+- [🚀 Key Features](#-key-features)
+  - [🔍 Detection Engineering](#-detection-engineering)
+  - [🌐 Threat Intelligence Integration](#-threat-intelligence-integration)
+  - [🐍 Python Automation](#-python-automation)
+- [🏗️ High-Level Architecture](#️-high-level-architecture)
+- [🔄 End-to-End Workflow](#-end-to-end-workflow)
+  - [*Figure: End-to-end workflow illustrating log collection, detection, enrichment, and SOC investigation.*](#figure-end-to-end-workflow-illustrating-log-collection-detection-enrichment-and-soc-investigation)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [📂 Repository Structure](#-repository-structure)
+- [☁️ AWS Infrastructure](#️-aws-infrastructure)
+  - [Infrastructure Components](#infrastructure-components)
+- [⚙️ Splunk Enterprise Configuration](#️-splunk-enterprise-configuration)
+  - [Configuration Summary](#configuration-summary)
+- [📡 Log Collection Pipeline](#-log-collection-pipeline)
+- [🖥️ Splunk Universal Forwarder](#️-splunk-universal-forwarder)
+    - [Forwarded Logs](#forwarded-logs)
+- [⚔️ Attack Simulation](#️-attack-simulation)
+  - [Attack Scenarios](#attack-scenarios)
+- [🎯 Detection Engineering](#-detection-engineering-1)
+  - [DET-001 — SSH Brute-Force Detection](#det-001--ssh-brute-force-detection)
+    - [Objective](#objective)
+    - [SPL](#spl)
+    - [Expected Result](#expected-result)
+    - [MITRE ATT\&CK](#mitre-attck)
+  - [DET-002 — Successful SSH Login Detection](#det-002--successful-ssh-login-detection)
+    - [Objective](#objective-1)
+    - [SPL](#spl-1)
+    - [Expected Result](#expected-result-1)
+    - [MITRE ATT\&CK](#mitre-attck-1)
+  - [DET-003 — Failed Login Trend](#det-003--failed-login-trend)
+    - [Objective](#objective-2)
+    - [SPL](#spl-2)
+    - [Expected Result](#expected-result-2)
+  - [DET-004 — Top Attacking IP Addresses](#det-004--top-attacking-ip-addresses)
+    - [Objective](#objective-3)
+    - [SPL](#spl-3)
+    - [Expected Result](#expected-result-3)
+  - [DET-005 — Password Spray Detection](#det-005--password-spray-detection)
+    - [Objective](#objective-4)
+    - [SPL](#spl-4)
+    - [MITRE ATT\&CK](#mitre-attck-2)
+  - [DET-006 — High-Risk Source IP Detection](#det-006--high-risk-source-ip-detection)
+    - [Objective](#objective-5)
+    - [SPL](#spl-5)
+    - [Expected Result](#expected-result-4)
+  - [DET-007 — Authentication Dashboard Metrics](#det-007--authentication-dashboard-metrics)
+- [🧠 Detection Summary](#-detection-summary)
+- [🌍 Threat Intelligence Integration](#-threat-intelligence-integration-1)
+  - [Enriched Threat Intelligence](#enriched-threat-intelligence)
+- [🐍 Python Automation](#-python-automation-1)
+  - [Automation Workflow](#automation-workflow)
+  - [Project Scripts](#project-scripts)
+    - [Automation Benefits](#automation-benefits)
+- [🚨 Alerting](#-alerting)
+- [📊 SOC Dashboard](#-soc-dashboard)
+  - [Dashboard Panels](#dashboard-panels)
+- [🔎 Investigation Workflow](#-investigation-workflow)
+- [🖼️ Project Gallery](#️-project-gallery)
+  - [☁️ AWS Infrastructure](#️-aws-infrastructure-1)
+  - [🖥️ Splunk Enterprise](#️-splunk-enterprise)
+  - [📄 Authentication Events](#-authentication-events)
+  - [🔍 SSH Brute-Force Detection](#-ssh-brute-force-detection)
+  - [📊 SOC Dashboard](#-soc-dashboard-1)
+  - [🌍 Threat Intelligence Enrichment](#-threat-intelligence-enrichment)
+- [📁 Documentation](#-documentation)
+- [🎯 Skills Demonstrated](#-skills-demonstrated)
+    - [Security Operations](#security-operations)
+    - [Splunk](#splunk)
+    - [Cloud](#cloud)
+    - [Threat Intelligence](#threat-intelligence)
+    - [Programming](#programming)
+    - [Security Frameworks](#security-frameworks)
+- [💡 Lessons Learned](#-lessons-learned)
+- [🚀 Future Enhancements](#-future-enhancements)
+- [👨‍💻 Author](#-author)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+  - [⭐ If you found this project useful, consider giving it a star!](#-if-you-found-this-project-useful-consider-giving-it-a-star)
 
 ---
 
-## 🏗️ Solution Architecture
+# 📌 Executive Overview
 
-This project simulates a production-inspired SOC pipeline: it collects Linux authentication events, detects SSH-based attacks, enriches suspicious IPs with external threat intelligence, and delivers actionable insight through Splunk dashboards — combining telemetry, automation, and threat intelligence to improve detection and investigation.
+Enterprise SSH Threat Monitoring is a Security Operations Center (SOC) project that demonstrates how organizations can detect, investigate, and enrich SSH brute-force attacks using Splunk Enterprise, Python automation, and external Threat Intelligence.
 
-The architecture has six major components:
+The project simulates real-world SSH password attacks against a Linux server, forwards authentication logs to Splunk through the Universal Forwarder, detects malicious authentication attempts using custom SPL searches, enriches attacker IP addresses with AbuseIPDB Threat Intelligence, and presents the findings through operational SOC dashboards.
 
-1. AWS Cloud Infrastructure
-2. Ubuntu Linux Endpoint
-3. Splunk Universal Forwarder
-4. Splunk Enterprise
-5. Python Automation Engine
-6. AbuseIPDB Threat Intelligence Platform
-
-Together, these transform raw authentication logs into enriched security detections.
-
-### Architecture Diagram
-
-```text
-                    ┌────────────────────────────┐
-                    │        Kali Linux          │
-                    │  SSH Brute Force Attacks   │
-                    └─────────────┬──────────────┘
-                                  │
-                                  ▼
-                 ┌────────────────────────────────┐
-                 │      Ubuntu Linux Server       │
-                 │  OpenSSH · auth.log             │
-                 │  Authentication Events         │
-                 └──────────────┬─────────────────┘
-                                │
-                                ▼
-               ┌──────────────────────────────────┐
-               │ Splunk Universal Forwarder (UF)  │
-               │ Monitors auth.log · Forwards      │
-               └──────────────┬───────────────────┘
-                              │
-                              ▼
-              ┌───────────────────────────────────┐
-              │      Splunk Enterprise SIEM       │
-              │  Indexing · Parsing · Searching   │
-              │  Detection Engineering            │
-              │  Dashboards · Alerts              │
-              └──────────────┬────────────────────┘
-                             │  Splunk SDK
-                             ▼
-          ┌─────────────────────────────────────┐
-          │     Python Automation Scripts       │
-          │  Extract suspicious IPs             │
-          │  Query AbuseIPDB · Validate         │
-          │  Generate CSV lookup                │
-          └──────────────┬──────────────────────┘
-                         │
-                         ▼
-            ┌─────────────────────────────┐
-            │    AbuseIPDB REST API       │
-            │  Reputation · ISP           │
-            │  Country · Abuse Reports    │
-            └─────────────┬───────────────┘
-                          │
-                          ▼
-               Splunk Lookup Table (CSV)
-                          │
-                          ▼
-              Detection Enrichment
-                          │
-                          ▼
-             SOC Dashboards & Alerts
-```
+Unlike basic SIEM labs that stop after log collection, this project follows the complete detection engineering lifecycle—from log ingestion and attack simulation to alerting, enrichment, investigation, and reporting.
 
 ---
 
-## 🔄 End-to-End Data Flow
+# 🎯 Project Objectives
 
-<p align="center">
-  <img src="screenshots/threat-intelligence/25-project-workflow.png" width="100%">
-</p>
-
-| Step | Stage | Description |
-|---|---|---|
-| 1 | **Attack Simulation** | Kali Linux performs SSH authentication attempts against the Ubuntu server, generating both legitimate and malicious events in `/var/log/auth.log`. |
-| 2 | **Log Collection** | Splunk Universal Forwarder continuously monitors `auth.log` and securely forwards new events to Splunk Enterprise. |
-| 3 | **Event Indexing** | Splunk parses, timestamps, classifies, and indexes each event, making it searchable via SPL. |
-| 4 | **Detection Engineering** | Custom SPL searches flag brute force, password spraying, targeted accounts, and post-failure successful logins. |
-| 5 | **Threat Intel Automation** | Python queries Splunk for attacker IPs, deduplicates them, queries AbuseIPDB, and regenerates the CSV lookup. |
-| 6 | **Threat Intel Correlation** | Splunk joins authentication events with the lookup table, adding abuse score, country, ISP, domain, and report history. |
-| 7 | **SOC Investigation** | Analysts review enriched events in dashboards — source IP, username, failure counts, and reputation — to prioritize response. |
+- Detect SSH brute-force attacks in real time
+- Build production-style SPL detection rules
+- Automate Threat Intelligence enrichment
+- Generate actionable security alerts
+- Visualize attacks through SOC dashboards
+- Investigate malicious activity using indexed logs
+- Demonstrate enterprise SIEM architecture
+- Apply Detection Engineering methodologies
 
 ---
 
-## ☁️ AWS Infrastructure
+# 🚀 Key Features
 
-| Component | Purpose |
-|---|---|
-| Amazon EC2 | Hosts the Ubuntu server |
-| Security Groups | Controls inbound SSH access |
-| Elastic IP | Public accessibility |
-| Ubuntu Server | Authentication target |
-| Splunk Enterprise | Centralized SIEM |
-| Splunk Universal Forwarder | Secure log forwarding |
+## 🔍 Detection Engineering
 
-**Why AWS?** Cloud-native infrastructure, elastic scalability, secure networking, and public accessibility for testing make AWS a closer match to real enterprise environments than a local VM lab.
-
----
-
-## 📥 Log Collection Pipeline
-
-```text
-Ubuntu auth.log → Splunk Universal Forwarder → Splunk Enterprise
-   → Index: linux_auth → Detection Searches → Threat Intel Enrichment
-   → Dashboards → Alerts → SOC Investigation
-```
-
-The **Universal Forwarder** handles telemetry collection — monitoring logs and forwarding them reliably with minimal CPU and memory overhead. **Splunk Enterprise** then owns everything downstream: indexing, normalization, search, detection engineering, dashboards, alerting, and threat intel correlation.
+- SSH Brute-force Detection
+- Successful Login Detection
+- Password Spray Identification
+- High-Risk Source IP Detection
+- Authentication Trend Analysis
+- Failed Login Threshold Alerts
+- MITRE ATT&CK Mapping
 
 ---
 
-## ⚔️ Attack Simulation
+## 🌐 Threat Intelligence Integration
 
-Controlled SSH attacks launched from Kali Linux validate the detection pipeline, covering:
+The project automatically enriches attacker IP addresses using the AbuseIPDB API.
 
-- SSH brute-force attempts
-- Invalid username attempts
-- Password spraying
-- Multiple failed logins
-- Successful login after repeated failures
+Each detected attacker IP is evaluated for:
 
-These scenarios generate realistic telemetry that exercises every custom SPL detection, from collection through investigation.
+- Abuse Confidence Score
+- Country
+- ISP
+- Domain
+- Usage Type
+- Total Reports
+- Last Reported Date
 
----
-
-## 🎯 Detection Engineering
-
-Rather than relying on Splunk's built-in detections, every analytic here was custom-built using SPL, statistical aggregation, event correlation, threshold-based logic, threat intel enrichment, and MITRE ATT&CK mapping — designed to cut false positives while giving analysts real investigative context.
-
-### Detection Catalog
-
-| ID | Detection | MITRE Technique | Severity |
-|---|---|---|---|
-| DET-001 | SSH Brute Force Detection | T1110 | High |
-| DET-002 | Password Spraying Detection | T1110.003 | High |
-| DET-003 | High Authentication Failure Volume | T1110 | Medium |
-| DET-004 | Successful Login After Multiple Failures | T1110 | Critical |
-| DET-005 | Targeted Account Detection | T1110 | Medium |
-| DET-006 | Threat Intelligence Match | T1583 / T1584 | High |
-| DET-007 | Brute Force + Threat Intel Correlation | T1110 | Critical |
-
-<details>
-<summary><b>DET-001 — SSH Brute Force Detection</b></summary>
-
-**Objective:** Identify source IPs generating excessive failed SSH login attempts against one or more accounts.
-
-**Detection Logic:** Monitor auth logs → count failed SSH logins → aggregate by source IP → trigger on threshold breach.
-
-**MITRE ATT&CK:** Credential Access — T1110 (Brute Force)
-
-**Investigation Value:** Quickly surfaces external hosts running credential attacks against Linux systems.
-</details>
-
-<details>
-<summary><b>DET-002 — Password Spraying Detection</b></summary>
-
-**Objective:** Detect a single source IP attempting authentication against multiple accounts with a limited password set.
-
-**Detection Logic:** Group failed logins by source IP → count unique usernames → alert when one IP targets multiple accounts.
-
-**MITRE ATT&CK:** Credential Access — T1110.003 (Password Spraying)
-
-**Investigation Value:** Password spraying often evades traditional brute-force thresholds and is common in enterprise environments.
-</details>
-
-<details>
-<summary><b>DET-003 — High Authentication Failure Volume</b></summary>
-
-**Objective:** Identify systems seeing unusually large numbers of failed authentication events.
-
-**Detection Logic:** Aggregate failures → monitor for spikes → flag abnormal login activity.
-
-**MITRE ATT&CK:** Credential Access — T1110
-
-**Investigation Value:** Surfaces attack campaigns or operational issues affecting authentication services.
-</details>
-
-<details>
-<summary><b>DET-004 — Successful Login After Multiple Failures</b></summary>
-
-**Objective:** Detect successful SSH logins immediately following repeated failed attempts.
-
-**Detection Logic:** Track failed logins → identify a subsequent success → correlate by source IP and username.
-
-**MITRE ATT&CK:** Credential Access — T1110
-
-**Investigation Value:** A success following repeated failures may indicate a compromised credential — flagged for immediate analyst review.
-</details>
-
-<details>
-<summary><b>DET-005 — Targeted Account Detection</b></summary>
-
-**Objective:** Identify accounts receiving an abnormal number of authentication attempts.
-
-**Detection Logic:** Aggregate by username → rank targeted accounts → identify repeated targeting.
-
-**MITRE ATT&CK:** Credential Access — T1110
-
-**Investigation Value:** Highlights privileged or high-value accounts that may need additional monitoring.
-</details>
-
-<details>
-<summary><b>DET-006 — Threat Intelligence Match</b></summary>
-
-**Objective:** Identify authentication attempts from IPs with a known malicious reputation.
-
-**Detection Logic:** Extract source IP → look up against AbuseIPDB → enrich with reputation data → prioritize malicious infrastructure.
-
-**MITRE ATT&CK:** Resource Development
-
-**Investigation Value:** Cuts investigation time by immediately flagging known malicious infrastructure.
-</details>
-
-<details>
-<summary><b>DET-007 — SSH Brute Force + Threat Intelligence Correlation</b></summary>
-
-**Objective:** Correlate brute-force behavior with external threat intelligence to surface high-confidence attacks, combining behavioral analytics with reputation scoring to cut false positives.
-
-**Detection Workflow:**
-```
-Authentication Events → Extract Source IP → Count Failed Logins
-   → Threat Intel Lookup → MITRE ATT&CK Mapping
-   → Dynamic Severity Assignment → SOC Alert
-```
-
-**Detection Criteria:** An alert fires when the failed login count exceeds threshold, the source IP exists in the threat intel lookup, and the abuse confidence score exceeds the configured threshold.
-
-**Dynamic Severity Model:**
-
-| Conditions | Severity |
-|---|---|
-| Score ≥ 100 & Failures ≥ 200 | Critical |
-| Score ≥ 100 & Failures ≥ 50 | High |
-| Score ≥ 90 | Medium |
-| Otherwise | Low |
-
-**MITRE ATT&CK:** Credential Access — T1110 (Brute Force)
-
-**Analyst Context:** Each alert includes source IP, failed login count, abuse confidence score, country, ISP, domain, usage type, abuse report count, first/last seen, and last abuse report — so analysts can prioritize without manually querying external sources.
-</details>
-
----
-
-## 🌍 Threat Intelligence Integration
-
-For every suspicious source IP, the enrichment process retrieves an abuse confidence score, country code and name, ISP, domain, usage type, total abuse reports, and last-reported date from **AbuseIPDB**. The results are stored in a Splunk CSV lookup and joined automatically with authentication events during SPL searches — letting analysts distinguish generic auth failures from attacks tied to infrastructure with a known history of abuse.
+This enrichment enables analysts to prioritize investigations based on reputation instead of relying solely on authentication logs.
 
 ---
 
 ## 🐍 Python Automation
 
-Manual threat intel enrichment doesn't scale in a modern SOC, so a Python pipeline automates the entire workflow end to end.
+Custom Python scripts automate the enrichment workflow by:
 
-| Script | Purpose |
-|---|---|
-| `main.py` | Orchestrates the complete automation workflow |
-| `abuseipdb.py` | Communicates with the AbuseIPDB REST API |
-| `lookup_builder.py` | Generates Splunk CSV lookup tables |
+- Extracting unique attacker IPs from Splunk
+- Querying AbuseIPDB
+- Building Threat Intelligence lookup tables
+- Updating Splunk lookups automatically
+- Eliminating repetitive analyst tasks
 
-**Workflow:**
+---
 
-1. Run a Splunk search via the Splunk SDK
-2. Retrieve and deduplicate source IPs from failed SSH events
-3. Query the AbuseIPDB REST API for each IP
-4. Validate responses and handle errors, timeouts, and connection failures
-5. Parse JSON and generate an updated CSV lookup
-6. Store the lookup in the Splunk lookup directory for future enrichment
+# 🏗️ High-Level Architecture
 
-### Splunk SDK Integration
 
-The Splunk Python SDK executes SPL searches, retrieves results, and extracts suspicious source IPs directly against live indexed data — no manual exports required.
+<p align="center">
+  <img src="diagrams/architecture.png"
+       alt="High-level architecture showing Kali Linux, Ubuntu Server, Splunk Universal Forwarder, Splunk Enterprise, and AbuseIPDB threat intelligence integration"
+       width="100%">
+</p>
 
-### Robust API Handling
+<p align="center">
+  <i>Figure 1. High-level architecture illustrating log collection, detection engineering, and threat intelligence enrichment.</i>
+</p>
 
-Defensive programming keeps the pipeline reliable: HTTP status and JSON validation, request timeouts, connection/exception handling, missing-field checks, and rate-limit awareness so enrichment keeps running through temporary API issues.
+The environment consists of four primary components:
 
-### Generated Lookup Schema
+| Component | Purpose |
+|------------|----------|
+| Kali Linux | Attack simulation |
+| Ubuntu Server | SSH target |
+| Splunk Universal Forwarder | Log forwarding |
+| Splunk Enterprise | Detection, dashboards, investigation |
+
+Authentication events generated on the Ubuntu server are collected by the Universal Forwarder and securely transmitted to Splunk Enterprise. Detection searches identify suspicious authentication patterns, while Python automation enriches attacker IPs using AbuseIPDB before dashboards present actionable security insights.
+
+---
+
+# 🔄 End-to-End Workflow
+
+```text
+Attacker (Kali Linux)
+          │
+          ▼
+SSH Brute-force Attack
+          │
+          ▼
+Ubuntu Server (auth.log)
+          │
+          ▼
+Splunk Universal Forwarder
+          │
+          ▼
+Splunk Enterprise Index
+          │
+          ▼
+SPL Detection Searches
+          │
+          ▼
+Python Threat Intelligence Enrichment
+          │
+          ▼
+AbuseIPDB API
+          │
+          ▼
+Threat Intelligence Lookup
+          │
+          ▼
+SOC Dashboard & Investigation
+```
+
+*Figure: End-to-end workflow illustrating log collection, detection, enrichment, and SOC investigation.*
+---
+
+# 🛠️ Technology Stack
+
+| Category | Technologies |
+|-----------|--------------|
+| Cloud | AWS EC2 |
+| Operating System | Ubuntu Server |
+| SIEM | Splunk Enterprise |
+| Log Collection | Splunk Universal Forwarder |
+| Programming | Python |
+| Query Language | SPL |
+| Threat Intelligence | AbuseIPDB API |
+| Version Control | Git & GitHub |
+| Security Framework | MITRE ATT&CK |
+| Documentation | Markdown |
+
+---
+
+# 📂 Repository Structure
+
+```text
+Enterprise-SSH-Threat-Monitoring
+│
+├── config/
+├── diagrams/
+├── docs/
+├── images/
+├── lookups/
+├── scripts/
+├── screenshots/
+├── requirements.txt
+├── pyproject.toml
+├── README.md
+└── LICENSE
+```
+
+---
+
+# ☁️ AWS Infrastructure
+
+The environment was deployed entirely on AWS EC2 to replicate an enterprise monitoring environment.
+
+## Infrastructure Components
+
+| Instance | Purpose |
+|-----------|----------|
+| Ubuntu EC2 | SSH Target Server |
+| Splunk EC2 | SIEM Platform |
+| Kali Linux VM | Attack Machine |
+
+The infrastructure was designed to simulate realistic attack scenarios while remaining lightweight enough for a personal cybersecurity lab.
+
+
+---
+
+# ⚙️ Splunk Enterprise Configuration
+
+Splunk Enterprise serves as the Security Information and Event Management (SIEM) platform responsible for collecting, indexing, searching, and visualizing authentication events generated by the Linux server.
+
+## Configuration Summary
+
+| Component | Status |
+|-----------|--------|
+| Splunk Enterprise | Installed |
+| Management Port | 8000 |
+| Receiving Port | 9997 |
+| Linux Authentication Logs | Indexed |
+| Search Head | Configured |
+| Dashboards | Created |
+| Alerts | Enabled |
+
+---
+
+# 📡 Log Collection Pipeline
+
+Authentication events generated on the Ubuntu server are continuously monitored by the Splunk Universal Forwarder.
+
+```
+/var/log/auth.log
+        │
+        ▼
+Splunk Universal Forwarder
+        │
+        ▼
+TCP 9997
+        │
+        ▼
+Splunk Enterprise
+        │
+        ▼
+linux_auth Index
+```
+
+Every authentication event is indexed in near real-time, allowing analysts to investigate suspicious activity as it occurs.
+
+---
+
+# 🖥️ Splunk Universal Forwarder
+
+The Splunk Universal Forwarder provides secure and lightweight log forwarding from the Linux server.
+
+### Forwarded Logs
+
+- SSH Authentication Logs
+- Failed Password Attempts
+- Successful Logins
+- Invalid User Attempts
+- Privilege Escalation Events (if generated)
+
+---
+
+# ⚔️ Attack Simulation
+
+To validate the detection pipeline, SSH brute-force attacks were simulated against the Ubuntu server from a Kali Linux attacker machine.
+
+## Attack Scenarios
+
+- Failed Password Attempts
+- Multiple Login Failures
+- Successful Authentication
+- Password Spray Simulation
+- High-Volume Login Attempts
+
+This generated realistic authentication events that could be detected and investigated through Splunk.
+
+---
+
+# 🎯 Detection Engineering
+
+One of the primary goals of this project was to develop production-style SPL detections capable of identifying malicious SSH authentication activity.
+
+Each detection follows a practical SOC workflow and maps to relevant MITRE ATT&CK techniques where applicable.
+
+---
+
+## DET-001 — SSH Brute-Force Detection
+
+### Objective
+
+Identify source IP addresses generating an excessive number of failed SSH login attempts.
+
+### SPL
+
+```spl
+index=linux_auth "Failed password"
+| rex field=_raw "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count by src_ip
+| where count>=5
+| sort -count
+```
+
+### Expected Result
+
+- Source IP
+- Failed Login Count
+
+### MITRE ATT&CK
+
+- T1110 — Brute Force
+
+---
+
+## DET-002 — Successful SSH Login Detection
+
+### Objective
+
+Identify successful SSH authentications.
+
+### SPL
+
+```spl
+index=linux_auth "Accepted password"
+| rex field=_raw "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| table _time host user src_ip
+```
+
+### Expected Result
+
+- Login Time
+- Username
+- Source IP
+
+### MITRE ATT&CK
+
+- T1078 — Valid Accounts
+
+---
+
+## DET-003 — Failed Login Trend
+
+### Objective
+
+Visualize failed authentication attempts over time.
+
+### SPL
+
+```spl
+index=linux_auth "Failed password"
+| timechart span=5m count
+```
+
+### Expected Result
+
+Trend graph displaying authentication spikes.
+
+---
+
+## DET-004 — Top Attacking IP Addresses
+
+### Objective
+
+Identify the most active attacking systems.
+
+### SPL
+
+```spl
+index=linux_auth "Failed password"
+| rex field=_raw "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| top src_ip
+```
+
+### Expected Result
+
+Top attacker IP addresses ranked by frequency.
+
+---
+
+## DET-005 — Password Spray Detection
+
+### Objective
+
+Detect one IP attempting to authenticate against multiple user accounts.
+
+### SPL
+
+```spl
+index=linux_auth "Failed password"
+| rex field=_raw "for (invalid user )?(?<user>\S+)"
+| rex field=_raw "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats dc(user) as targeted_users by src_ip
+| where targeted_users>=3
+```
+
+### MITRE ATT&CK
+
+- T1110.003 — Password Spraying
+
+---
+
+## DET-006 — High-Risk Source IP Detection
+
+### Objective
+
+Display attacker IPs enriched through Threat Intelligence.
+
+### SPL
+
+```spl
+index=linux_auth
+| lookup abuseipdb_lookup src_ip OUTPUT abuseConfidenceScore countryCode isp
+| table src_ip abuseConfidenceScore countryCode isp
+```
+
+### Expected Result
+
+Threat Intelligence enriched attacker list.
+
+---
+
+## DET-007 — Authentication Dashboard Metrics
+
+Key operational metrics include:
+
+- Failed Logins
+- Successful Logins
+- Unique Attackers
+- Top Source Countries
+- Top ISPs
+- Highest Abuse Scores
+- Authentication Timeline
+
+---
+
+# 🧠 Detection Summary
+
+| Detection | Purpose |
+|-----------|---------|
+| DET-001 | SSH Brute Force |
+| DET-002 | Successful Login |
+| DET-003 | Authentication Trend |
+| DET-004 | Top Attackers |
+| DET-005 | Password Spray |
+| DET-006 | Threat Intelligence |
+| DET-007 | Dashboard Metrics |
+
+---
+
+# 🌍 Threat Intelligence Integration
+
+To provide meaningful context for detected attacker IP addresses, the project integrates with the AbuseIPDB API. Every unique source IP extracted from Splunk is automatically queried, allowing analysts to distinguish between unknown addresses and IPs with a documented history of malicious activity.
+
+## Enriched Threat Intelligence
+
+Each attacker IP is enriched with:
 
 | Field | Description |
-|---|---|
-| `src_ip` | Source IP address |
-| `abuseConfidenceScore` | Abuse confidence rating |
-| `countryCode` | Country code |
-| `countryName` | Country name |
-| `isp` | Internet Service Provider |
-| `domain` | Associated domain |
-| `usageType` | Network usage classification |
-| `totalReports` | Number of abuse reports |
-| `lastReportedAt` | Last reported abuse timestamp |
+|--------|-------------|
+| IP Address | Source attacker IP |
+| Abuse Confidence Score | Reputation score (0–100) |
+| Country | Geographic location |
+| ISP | Internet Service Provider |
+| Domain | Registered domain |
+| Usage Type | Hosting, ISP, Data Center, etc. |
+| Total Reports | Number of abuse reports |
+| Last Reported | Most recent report date |
 
-This lookup is consumed directly via the `lookup` command, enriching events in real time without repeated API calls.
-
----
-
-## 📊 SOC Dashboards
-
-Custom dashboards give analysts immediate operational visibility, including:
-
-- Failed and successful SSH authentication attempts
-- Top attacking IP addresses and most-targeted accounts
-- Authentication activity over time
-- Threat intelligence matches and abuse confidence score distribution
-- Country of origin for attacker IPs and high-severity detections
-
-## 🚨 Scheduled Alerting
-
-Scheduled searches continuously evaluate authentication events against the detection catalog above, generating alerts for brute force, password spraying, high-volume failures, post-failure successes, and threat intel matches — with severity set by the DET-007 dynamic model.
+The enriched data is stored as a Splunk lookup table and automatically referenced by detection searches and dashboards.
 
 ---
 
-## 🔍 SOC Investigation Workflow
+# 🐍 Python Automation
 
-| Step | Action |
-|---|---|
-| 1. Alert Generation | A scheduled SPL search flags suspicious behavior and fires an alert |
-| 2. Event Review | Analyst reviews source IP, username, auth status, failure count, timestamps |
-| 3. Threat Intel Enrichment | Source IP is enriched automatically via the AbuseIPDB lookup |
-| 4. Risk Assessment | Analyst weighs behavior, reputation score, history, and account targeting |
-| 5. Investigation | Analyst prioritizes, investigates, searches related activity, and escalates if needed |
+Python scripts automate the Threat Intelligence workflow, eliminating manual lookups and enabling repeatable enrichment.
 
----
+## Automation Workflow
 
-## 📷 Project Gallery
+```
+Splunk Search
+      │
+      ▼
+Extract Unique IPs
+      │
+      ▼
+Query AbuseIPDB API
+      │
+      ▼
+Generate CSV Lookup
+      │
+      ▼
+Update Splunk Lookup
+      │
+      ▼
+Dashboard Enrichment
+```
 
-| Architecture | Splunk Dashboard |
-|---|---|
-| ![Architecture](screenshots/architecture/01-architecture.png) | ![Dashboard](screenshots/dashboard/09-dashboard.png) |
+## Project Scripts
 
-| Threat Intel Enrichment | Python Automation |
-|---|---|
-| ![Enrichment](screenshots/threat-intelligence/21-threat-intelligence-enrichment.png) | ![Automation](screenshots/threat-intelligence/20-python-automation.png) |
+| Script | Purpose |
+|---------|---------|
+| main.py | Executes the complete automation workflow |
+| splunk_client.py | Retrieves attacker IPs from Splunk |
+| abuseipdb.py | Queries the AbuseIPDB API |
+| lookup_builder.py | Creates the lookup CSV |
+| config.py | Loads environment variables and credentials |
 
-**Generated Lookup**
+### Automation Benefits
 
-<p align="center"><img src="screenshots/threat-intelligence/23-abuseipdb-lookup.csv.png" width="100%"></p>
-
----
-
-## 💡 Lessons Learned
-
-- **Security Monitoring** — designing centralized log pipelines and understanding authentication telemetry
-- **Detection Engineering** — writing production-style SPL, threshold-based detections, false-positive reduction, and MITRE mapping
-- **Threat Intelligence** — integrating REST APIs into SIEM workflows to sharpen analyst context
-- **Python Automation** — parsing JSON, building resilient API integrations, and generating Splunk-compatible lookups
-- **Cloud Security** — deploying and operating cloud-hosted monitoring infrastructure on AWS
-
----
-
-## 🚀 Future Enhancements
-
-| Area | Ideas |
-|---|---|
-| Detection Engineering | Geo-anomaly detection, impossible travel, credential stuffing, UBA, time-based anomalies |
-| Threat Intelligence | VirusTotal, AlienVault OTX, GreyNoise, MISP, URLHaus integrations |
-| Automation | Scheduled enrichment jobs, IOC expiration handling, multi-source correlation |
-| SOC Enhancements | Risk-based alerting, SOAR integration, case management, Slack/email notifications |
-| Infrastructure | Multi-endpoint monitoring, Windows/Sysmon, Active Directory, container logs |
+- Eliminates repetitive analyst tasks
+- Enriches detections automatically
+- Produces reusable lookup tables
+- Improves investigation speed
+- Demonstrates Python automation within a SOC workflow
 
 ---
 
-## 🏅 Skills Demonstrated
+# 🚨 Alerting
 
-| Category | Skills |
-|---|---|
-| SIEM & Monitoring | Splunk Enterprise, SPL, log collection, event correlation, dashboards, alerting |
-| Detection Engineering | Custom detections, SSH brute force & spraying detection, MITRE ATT&CK mapping, dynamic severity |
-| Threat Intelligence | AbuseIPDB, IOC correlation, reputation scoring, REST API integration |
-| Programming & Automation | Python, Splunk SDK, JSON/CSV processing, exception handling |
-| Cloud & Infrastructure | AWS, Ubuntu, Kali Linux, Splunk Universal Forwarder, SSH monitoring |
+Custom SPL searches can be configured as scheduled alerts to notify analysts when suspicious authentication activity exceeds defined thresholds.
 
----
+Example alert conditions include:
 
-## 📄 License
-
-Licensed under the **MIT License** — free to use, modify, and distribute in accordance with its terms.
+- More than 5 failed logins from a single IP
+- Password spray attempts
+- Successful logins following multiple failures
+- Connections from high-risk IP addresses
+- Authentication spikes within a defined time window
 
 ---
 
-## 👨‍💻 Author
+# 📊 SOC Dashboard
+
+The Splunk dashboard provides analysts with a centralized view of authentication activity and attacker intelligence.
+
+## Dashboard Panels
+
+- Failed Login Timeline
+- Successful Login Timeline
+- Top Attacking IP Addresses
+- Failed Logins by Host
+- Authentication Volume
+- Threat Intelligence Summary
+- Abuse Confidence Scores
+- Top Countries
+- Top ISPs
+
+The dashboard enables analysts to rapidly identify attack trends, prioritize investigations, and assess the severity of authentication events.
+
+---
+
+# 🔎 Investigation Workflow
+
+The investigation process follows a structured SOC methodology.
+
+1. SSH attack is launched against the Ubuntu server.
+2. Authentication events are written to `auth.log`.
+3. Splunk Universal Forwarder forwards logs.
+4. Splunk indexes incoming events.
+5. SPL detections identify suspicious activity.
+6. Python automation enriches attacker IPs.
+7. Dashboards display enriched security events.
+8. Analysts investigate affected hosts and attacker behavior.
+
+This workflow mirrors the lifecycle commonly used by enterprise Security Operations Centers.
+
+---
+
+# 🖼️ Project Gallery
+
+The following screenshots highlight the deployment, detection workflow, dashboards, and threat intelligence enrichment implemented throughout the project.
+
+## ☁️ AWS Infrastructure
+
+<p align="center">
+  <img src="screenshots/aws/01-ec2-instances.png"
+       alt="AWS EC2 instances hosting the Ubuntu SSH target server and Splunk Enterprise SIEM"
+       width="100%">
+</p>
+
+<p align="center">
+<i>AWS EC2 infrastructure hosting the Ubuntu SSH target server and Splunk Enterprise SIEM.</i>
+</p>
+
+---
+
+## 🖥️ Splunk Enterprise
+
+<p align="center">
+<img src="screenshots/splunk/04-splunk-home.png"
+     alt="Splunk Enterprise home dashboard displaying the SIEM interface"
+     width="100%">
+</p>
+
+<p align="center">
+<i>Splunk Enterprise interface used for log ingestion, searching, visualization, and security monitoring.</i>
+</p>
+
+---
+
+
+## 📄 Authentication Events
+
+<p align="center">
+<img src="screenshots/splunk/08-linux-auth-events.png"
+     alt="Linux SSH authentication events indexed in Splunk from the auth.log file"
+     width="100%">
+</p>
+
+<p align="center">
+<i>Linux SSH authentication events successfully collected and indexed from the <code>/var/log/auth.log</code> file.</i>
+</p>
+
+---
+
+
+## 🔍 SSH Brute-Force Detection
+
+<p align="center">
+<img src="screenshots/dashboard/12-bruteforce-table.png"
+     alt="Splunk search results identifying SSH brute-force attacks and repeated failed login attempts"
+     width="100%">
+</p>
+
+<p align="center">
+<i>Custom SPL detection highlighting repeated failed SSH login attempts and identifying suspicious source IP activity.</i>
+</p>
+
+---
+
+## 📊 SOC Dashboard
+
+<p align="center">
+<img src="screenshots/dashboard/11-dashboard.png"
+     alt="Interactive Splunk SOC dashboard visualizing authentication activity and security metrics"
+     width="100%">
+</p>
+
+<p align="center">
+<i>Interactive SOC dashboard providing real-time visibility into authentication events, attack trends, and security metrics.</i>
+</p>
+
+---
+
+## 🌍 Threat Intelligence Enrichment
+
+<p align="center">
+<img src="screenshots/threat-intelligence/21-threat-intelligence-enrichment.png"
+     alt="Threat intelligence enrichment in Splunk using AbuseIPDB reputation data for attacker IP addresses"
+     width="100%">
+</p>
+
+<p align="center">
+<i>Automatic enrichment of attacker IP addresses using AbuseIPDB threat intelligence to provide reputation and contextual information.</i>
+</p>
+
+---
+
+# 📁 Documentation
+
+Additional documentation is available in the `docs/` directory, including:
+
+- Deployment Guide
+- Splunk Configuration
+- Threat Intelligence Workflow
+- Detection Engineering Notes
+- Architecture Documentation
+
+---
+
+# 🎯 Skills Demonstrated
+
+This project demonstrates practical experience in:
+
+### Security Operations
+
+- SIEM Operations
+- Detection Engineering
+- Incident Investigation
+- Log Analysis
+- Security Monitoring
+
+### Splunk
+
+- SPL Development
+- Dashboards
+- Alerting
+- Lookups
+- Data Indexing
+
+### Cloud
+
+- AWS EC2
+- Ubuntu Administration
+- Linux Log Management
+
+### Threat Intelligence
+
+- AbuseIPDB API
+- IOC Enrichment
+- Reputation Analysis
+
+### Programming
+
+- Python
+- REST API Integration
+- CSV Processing
+- Automation
+
+### Security Frameworks
+
+- MITRE ATT&CK
+- Detection Engineering Methodology
+
+---
+
+# 💡 Lessons Learned
+
+Through this project, I gained practical experience in designing and implementing an end-to-end detection engineering workflow.
+
+Key takeaways include:
+
+- Building enterprise-style SIEM architectures
+- Developing effective SPL detection searches
+- Working with Linux authentication logs
+- Automating repetitive SOC tasks with Python
+- Integrating external Threat Intelligence sources
+- Investigating SSH authentication attacks
+- Designing dashboards for operational visibility
+- Documenting technical projects for knowledge sharing
+
+---
+
+# 🚀 Future Enhancements
+
+Planned improvements include:
+
+- GeoIP visualizations
+- Automated case creation with TheHive
+- VirusTotal integration
+- Email and Slack alerting
+- Sigma rule mapping
+- Additional Linux detections
+- Windows event monitoring
+- Detection tuning and false-positive reduction
+- SOAR integration with Shuffle
+- ATT&CK Navigator heat maps
+
+---
+
+# 👨‍💻 Author
 
 **Ravi Kiran Kambhampati**
-*Cybersecurity & Cloud Operations Graduate*
 
-Focused on detection engineering, security operations, threat intelligence, cloud security, SIEM engineering, incident response, and security automation.
+Cybersecurity & Cloud Operations Graduate
 
-[LinkedIn](https://www.linkedin.com/in/ravikirankambhampati/) · [GitHub Repository](https://github.com/ravikirank29/Enterprise-SSH-Threat-Monitoring)
+- Detection Engineering
+- SOC Operations
+- Splunk
+- Python Automation
+- Threat Intelligence
+- AWS
+
+GitHub: [ravikirank29](https://github.com/ravikirank29)
+
+LinkedIn: [Ravi Kiran Kambhampati](https://www.linkedin.com/in/ravi-kiran-kambhampati/)
 
 ---
 
-<p align="center">⭐ If this project was useful, consider starring the repository — it helps others find it and supports continued development.</p>
+# 🤝 Contributing
 
-<p align="center"><b>Built for Blue Teaming, Detection Engineering, and Continuous Learning.</b></p>
+Contributions, suggestions, and feedback are welcome. Feel free to open an issue or submit a pull request if you have ideas for improving this project.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for additional information.
+
+---
+
+## ⭐ If you found this project useful, consider giving it a star!
+
