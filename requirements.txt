@@ -1,13 +1,16 @@
-# ============================================================
+# ================================================
 # Enterprise SSH Threat Intelligence Monitoring
 # Python Dependencies
-# ============================================================
+# ================================================
 
 # Splunk SDK
-splunk-sdk>=3.0.0
+splunk-sdk==2.1.1
 
 # HTTP Client
-requests>=2.34.2
+requests>=2.32.3
 
-# Environment Variable Management
-python-dotenv>=1.2.2
+# Environment Variables
+python-dotenv>=1.0.1
+
+# Testing
+pytest>=8.3.2
