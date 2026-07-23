@@ -1,20 +1,49 @@
 name: Python CI
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - master
   pull_request:
+    branches:
+      - main
+      - master
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - run: pip install -r requirements.txt
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - run: pytest
+      - name: Create Test Environment
+        run: |
+          mkdir -p config
+          cat > config/.env << EOF
+          API_KEY=test_api_key
+          SPLUNK_HOST=localhost
+          SPLUNK_PORT=8089
+          SPLUNK_USERNAME=admin
+          SPLUNK_PASSWORD=changeme
+          EOF
+
+      - name: Run Tests
+        run: |
+          pytest -v
+
+      - name: Clean Up
+        if: always()
+        run: |
+          rm -f config/.env
